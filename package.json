@@ -15,5 +15,11 @@
   "author": "Yu-yu0202",
   "license": "MIT",
   "type": "module",
-  "packageManager": "pnpm@10.12.1"
+  "packageManager": "pnpm@10.12.1",
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.8.3"
+  }
 }
