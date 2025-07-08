@@ -1,0 +1,19 @@
+{
+  "name": "aviutl2-style-config-editor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "electron .",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps",
+    "lint": "eslint . --ext .ts,.tsx",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix"
+  },
+  "keywords": [],
+  "author": "Yu-yu0202",
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@10.12.1"
+}
