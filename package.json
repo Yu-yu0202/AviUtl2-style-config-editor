@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "typings": "./src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "electron .",
