@@ -2,7 +2,7 @@
   "name": "aviutl2-style-config-editor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "typings": "./src/index.d.ts",
   "scripts": {
     "build": "tsc",
@@ -18,9 +18,24 @@
   "type": "module",
   "packageManager": "pnpm@10.12.1",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/node": "^24.0.10",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.6.0",
+    "autoprefixer": "^10.4.21",
     "electron": "^37.2.0",
     "electron-builder": "^26.0.12",
-    "typescript": "^5.8.3"
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.3"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/material": "^7.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }
