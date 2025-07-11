@@ -58,7 +58,7 @@ jobs:
       - name: Build Tauri app (release)
         env:
           RUSTC_WRAPPER: sccache
-        run: pnpm tauri build -- --release
+        run: pnpm tauri build
         working-directory: ./
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
