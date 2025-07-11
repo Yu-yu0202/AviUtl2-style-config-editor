@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { SettingsCard } from "./components/SettingsCard.js";
+"use client";
 
-// 型定義
-declare global {
-  interface Window {
-    electronAPI: {
-      readConf: () => Record<string, Record<string, string>>;
-      writeConf: (confJson: Record<string, Record<string, string>>) => void;
-    };
-  }
-}
+import React, { useState } from "react";
+import { SettingsCard, SettingsCardProp } from "./components/SettingsCard";
+import { Button, Box } from "@mui/material";
+import { open } from '@tauri-apps/plugin-dialog';
+import { invoke } from '@tauri-apps/api/core';
+import pkg from '../../package.json' assert { type: 'json' };
+const version = pkg.version;
 
 const fontItemsDef = [
   { label: "標準のフォント名", type: "text", internalID: "DefaultFamily", internalGroup: "Font" },
@@ -115,23 +112,117 @@ const formatItemsDef = [
   { label: "フッター右表示フォーマット", type: "text", internalID: "FooterRight", internalGroup: "Format" },
 ];
 
-const App: React.FC = () => {
-  const [fontItems, setFontItems] = useState<any[]>([]);
-  const [colorItems, setColorItems] = useState<any[]>([]);
-  const [layoutItems, setLayoutItems] = useState<any[]>([]);
-  const [formatItems, setFormatItems] = useState<any[]>([]);
+function formatConfigForSave(confData: Record<string, Record<string, string>>): string {
+  const order = ["Font", "Color", "Layout", "Format"];
+  return order
+    .map(group => {
+      const groupData = confData[group];
+      if (!groupData) return '';
+      const section = `[${group}]`;
+      const body = Object.entries(groupData)
+        .map(([key, value]) => `${key}=${value}`)
+        .join('\n');
+      return `${section}\n${body}`;
+    })
+    .filter(Boolean)
+    .join('\n\n');
+}
 
-  useEffect(() => {
-    const confJson = window.electronAPI.readConf();
-    setFontItems(fontItemsDef.map(def => ({ ...def, value: confJson.Font?.[def.internalID] ?? "" })));
-    setColorItems(colorItemsDef.map(def => ({ ...def, value: confJson.Color?.[def.internalID] ?? "" })));
-    setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: confJson.Layout?.[def.internalID] ?? "" })));
-    setFormatItems(formatItemsDef.map(def => ({ ...def, value: confJson.Format?.[def.internalID] ?? "" })));
-  }, []);
+const App: React.FC = () => {
+  const [confData, setConfData] = useState<Record<string, Record<string, string>>>({});
+  const [fontItems, setFontItems] = useState<SettingsCardProp[]>([]);
+  const [colorItems, setColorItems] = useState<SettingsCardProp[]>([]);
+  const [layoutItems, setLayoutItems] = useState<SettingsCardProp[]>([]);
+  const [formatItems, setFormatItems] = useState<SettingsCardProp[]>([]);
+  const [currentFilePath, setCurrentFilePath] = useState<string>("");
+
+
+
+  const loadConfig = async (filePath?: string) => {
+    if (!filePath) return;
+    try {
+      const content = await invoke<string>('read_config_file', { path: filePath });
+      const confJson = await invoke('parse_config', { content });
+      setConfData(confJson as Record<string, Record<string, string>>);
+      const data = confJson as Record<string, Record<string, string>>;
+      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+    } catch (error) {
+      console.error('設定の読み込みに失敗しました:', error);
+    }
+  };
+
+  const handleItemChange = (group: string, id: string, value: string) => {
+    setConfData(prev => ({
+      ...prev,
+      [group]: {
+        ...prev[group],
+        [id]: value
+      }
+    }));
+
+    const updateItems = (
+      _items: SettingsCardProp[],
+      setItems: React.Dispatch<React.SetStateAction<SettingsCardProp[]>>
+    ) => {
+      setItems(prev => prev.map(item => 
+        item.internalGroup === group && item.internalID === id 
+          ? { ...item, value } 
+          : item
+      ));
+    };
+
+    if (group === 'Font') updateItems(fontItems, setFontItems);
+    else if (group === 'Color') updateItems(colorItems, setColorItems);
+    else if (group === 'Layout') updateItems(layoutItems, setLayoutItems);
+    else if (group === 'Format') updateItems(formatItems, setFormatItems);
+  };
+
+  const saveConfig = async () => {
+    if (!currentFilePath) {
+      alert('ファイルが選択されていません。');
+      return;
+    }
+    try {
+      const content = `; style.conf 
+; Last edited by AviUtl2-Style-Config-Editor at ${new Date().toISOString()}
+; AviUtl2-Style-Config-Editor v${version} by Yu-yu0202
+
+` + formatConfigForSave(confData);
+      await invoke('write_config_file', { path: currentFilePath, content });
+      alert('設定を保存しました！');
+    } catch (error) {
+      console.error('設定の保存に失敗しました:', error);
+      alert('設定の保存に失敗しました。');
+    }
+  };
+
+  const selectFileAndLoad = async () => {
+    try {
+      const filePath = await open({
+        multiple: false,
+        filters: [{ name: 'Config', extensions: ['conf'] }]
+      });
+      if (filePath) {
+        setCurrentFilePath(filePath as string);
+        await loadConfig(filePath as string);
+      }
+    } catch (error) {
+      console.error('ファイル選択に失敗しました:', error);
+    }
+  };
 
   return (
-    <>
-      <h1 className="text-3xl font-bold text-theme-primary mb-6 text-center">AviUtl2 Style.conf Editor</h1>
+    <Box sx={{ p: 3 }}>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>AviUtl2 Style.conf Editor</h1>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, gap: 2 }}>
+        <Button variant="contained" color="primary" onClick={saveConfig} size="large">
+          設定を保存
+        </Button>
+        <Button variant="outlined" onClick={selectFileAndLoad}>設定ファイルを選択</Button>
+      </Box>
       <div
         style={{
           display: "grid",
@@ -144,17 +235,15 @@ const App: React.FC = () => {
           margin: "0 auto",
         }}
       >
-        {/* 1列目（左） */}
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-          <SettingsCard title="フォントの設定" items={fontItems} />
-          <SettingsCard title="レイアウトの設定" items={layoutItems} />
-          <SettingsCard title="フォーマットの設定" items={formatItems} />
+          <SettingsCard title="フォントの設定" items={fontItems} onItemChange={handleItemChange} />
+          <SettingsCard title="レイアウトの設定" items={layoutItems} onItemChange={handleItemChange} />
+          <SettingsCard title="フォーマットの設定" items={formatItems} onItemChange={handleItemChange} />
         </div>
-        {/* 2列目（右） */}
-        <SettingsCard title="色の設定" items={colorItems} />
+        <SettingsCard title="色の設定" items={colorItems} onItemChange={handleItemChange} />
       </div>
-    </>
+    </Box>
   );
 };
 
-export default App; 
+export default App;

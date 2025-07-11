@@ -1,0 +1,54 @@
+{
+  "productName": "AviUtl2 Style Config Editor",
+  "version": "0.1.0",
+  "identifier": "com.aviutl2.style-config-editor",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devUrl": "http://localhost:3000",
+    "frontendDist": "../out"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "AviUtl2 Style Config Editor",
+        "width": 1200,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "default",
+          "description": "default rule",
+          "windows": ["main"],
+          "permissions": [
+            "dialog:allow-open",
+            "dialog:default"
+          ]
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["msi"],
+    "windows": {
+      "certificateThumbprint": null,
+      "digestAlgorithm": "sha256",
+      "timestampUrl": ""
+    },
+    "icon": [
+      "icons/editor_icon_256x256.ico"
+    ]
+  },
+  "plugins": {
+    "dialog": null,
+    "fs": {
+      "requireLiteralLeadingDot": false
+    }
+  }
+}
