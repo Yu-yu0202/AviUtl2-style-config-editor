@@ -37,7 +37,7 @@ jobs:
         run: pnpm build
 
       - name: Build Tauri app (release)
-        run: pnpm tauri build -- --release
+        run: pnpm tauri build
         working-directory: ./
 
       - name: Upload Release Asset
