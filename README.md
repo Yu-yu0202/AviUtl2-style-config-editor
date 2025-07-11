@@ -5,7 +5,7 @@ AviUtl2のstyle.confファイルを編集するためのTauriアプリケーシ�
 ## 開発環境のセットアップ
 
 ### 必要な環境
-- Node.js (v18以上)
+- Node.js (v18以上,動作確認済み:v22.14.0)
 - Rust (最新版)
 - pnpm
 
