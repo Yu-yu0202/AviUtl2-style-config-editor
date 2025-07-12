@@ -1,6 +1,10 @@
 {
   "name": "aviutl2-style-config-editor",
+<<<<<<< HEAD
   "version": "0.2.0-Preview",
+=======
+  "version": "0.2.0",
+>>>>>>> 51612e7d133f84a85934c979637b5964ac979bf8
   "type": "module",
   "description": "AviUtl2 Style Config Editor",
   "author": "Yu-yu0202",
