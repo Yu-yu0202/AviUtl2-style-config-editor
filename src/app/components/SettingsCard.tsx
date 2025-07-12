@@ -3,6 +3,7 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
 
 export type SettingsCardProp = {
   label: string;
@@ -11,15 +12,17 @@ export type SettingsCardProp = {
   type: 'text' | 'number' | 'color' | 'info';
   placeholder?: string;
   value?: string | number;
+  isSelected?: boolean;
 };
 
 export type SettingsCardProps = {
   title: string;
   items: SettingsCardProp[];
   onItemChange: (group: string, id: string, value: string) => void;
+  onItemSelect: (group: string, id: string, selected: boolean) => void;
 };
 
-export function SettingsCard({ title, items, onItemChange }: SettingsCardProps) {
+export function SettingsCard({ title, items, onItemChange, onItemSelect }: SettingsCardProps) {
   return (
     <Card
       variant="outlined"
@@ -45,7 +48,14 @@ export function SettingsCard({ title, items, onItemChange }: SettingsCardProps) 
         >
           {items.map((item, idx) => (
             <Box key={idx} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <span style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>{item.label}</span>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Checkbox
+                  checked={item.isSelected || false}
+                  onChange={(e) => onItemSelect(item.internalGroup, item.internalID, e.target.checked)}
+                  size="small"
+                />
+                <span style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>{item.label}</span>
+              </Box>
               {item.type === 'color' ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <input

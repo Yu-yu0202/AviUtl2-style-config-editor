@@ -136,8 +136,7 @@ const App: React.FC = () => {
   const [layoutItems, setLayoutItems] = useState<SettingsCardProp[]>([]);
   const [formatItems, setFormatItems] = useState<SettingsCardProp[]>([]);
   const [currentFilePath, setCurrentFilePath] = useState<string>("");
-
-
+  const [defaultConfig, setDefaultConfig] = useState<Record<string, Record<string, string>>>({});
 
   const loadConfig = async (filePath?: string) => {
     if (!filePath) return;
@@ -150,6 +149,13 @@ const App: React.FC = () => {
       setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+
+      // Load default config when loading a file for the first time
+      if (!defaultConfig.Font) {
+        const defaultConfigStr = await invoke<string>('get_default_config');
+        const defaultConfJson = await invoke('parse_config', { content: defaultConfigStr });
+        setDefaultConfig(defaultConfJson as Record<string, Record<string, string>>);
+      }
     } catch (error) {
       console.error('設定の読み込みに失敗しました:', error);
     }
@@ -181,20 +187,40 @@ const App: React.FC = () => {
     else if (group === 'Format') updateItems(formatItems, setFormatItems);
   };
 
-  const saveConfig = async () => {
+  const handleItemSelect = (group: string, id: string, selected: boolean) => {
+    const updateItems = (
+      setItems: React.Dispatch<React.SetStateAction<SettingsCardProp[]>>
+    ) => {
+      setItems(prev => prev.map(item => 
+        item.internalGroup === group && item.internalID === id 
+          ? { ...item, isSelected: selected } 
+          : item
+      ));
+    };
+
+    if (group === 'Font') updateItems(setFontItems);
+    else if (group === 'Color') updateItems(setColorItems);
+    else if (group === 'Layout') updateItems(setLayoutItems);
+    else if (group === 'Format') updateItems(setFormatItems);
+  };
+
+  const saveConfig = async (showAlert: boolean = true, data?: Record<string, Record<string, string>>) => {
     if (!currentFilePath) {
       alert('ファイルが選択されていません。');
       return;
     }
     try {
+      const configData = data || confData;
       const content = `; style.conf 
 ; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 
-` + formatConfigForSave(confData);
+` + formatConfigForSave(configData);
 
       await invoke('write_config_file', { path: currentFilePath, content });
-      alert('設定を保存しました！');
+      if (showAlert) {
+        alert('設定を保存しました！');
+      }
     } catch (error) {
       console.error('設定の保存に失敗しました:', error);
       alert('設定の保存に失敗しました。');
@@ -234,11 +260,57 @@ const App: React.FC = () => {
     }
   }
 
+  const resetSelectedItems = async () => {
+    if (!defaultConfig.Font) {
+      alert('デフォルト設定が読み込まれていません。');
+      return;
+    }
+
+    // 新しいconfDataを作成
+    const newConfData = { ...confData };
+
+    const updateSelectedItems = (
+      items: SettingsCardProp[],
+      setItems: React.Dispatch<React.SetStateAction<SettingsCardProp[]>>,
+      group: string
+    ) => {
+      const newItems = items.map(item => {
+        if (item.isSelected) {
+          const defaultValue = defaultConfig[group]?.[item.internalID] ?? "";
+          // confDataを更新
+          if (!newConfData[group]) {
+            newConfData[group] = {};
+          }
+          newConfData[group][item.internalID] = defaultValue;
+          return { ...item, value: defaultValue };
+        }
+        return item;
+      });
+      setItems(newItems);
+    };
+
+    updateSelectedItems(fontItems, setFontItems, 'Font');
+    updateSelectedItems(colorItems, setColorItems, 'Color');
+    updateSelectedItems(layoutItems, setLayoutItems, 'Layout');
+    updateSelectedItems(formatItems, setFormatItems, 'Format');
+
+
+    setConfData(newConfData);
+
+    await saveConfig(false, newConfData);
+    alert('デフォルト設定で上書きしました！');
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>AviUtl2 Style.conf Editor</h1>
       <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, gap: 2 }}>
-        <Button variant="contained" color="primary" onClick={saveConfig} size="large">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => saveConfig()}
+          size="large"
+        >
           設定を保存
         </Button>
         <Button
@@ -256,6 +328,13 @@ const App: React.FC = () => {
         >
           全てデフォルト設定で上書き
         </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => resetSelectedItems()}
+        >
+          選択項目をデフォルトに戻す
+        </Button>
       </Box>
       <div
         style={{
@@ -270,11 +349,31 @@ const App: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-          <SettingsCard title="フォントの設定" items={fontItems} onItemChange={handleItemChange} />
-          <SettingsCard title="レイアウトの設定" items={layoutItems} onItemChange={handleItemChange} />
-          <SettingsCard title="フォーマットの設定" items={formatItems} onItemChange={handleItemChange} />
+          <SettingsCard 
+            title="フォントの設定" 
+            items={fontItems} 
+            onItemChange={handleItemChange} 
+            onItemSelect={handleItemSelect}
+          />
+          <SettingsCard 
+            title="レイアウトの設定" 
+            items={layoutItems} 
+            onItemChange={handleItemChange} 
+            onItemSelect={handleItemSelect}
+          />
+          <SettingsCard 
+            title="フォーマットの設定" 
+            items={formatItems} 
+            onItemChange={handleItemChange} 
+            onItemSelect={handleItemSelect}
+          />
         </div>
-        <SettingsCard title="色の設定" items={colorItems} onItemChange={handleItemChange} />
+        <SettingsCard 
+          title="色の設定" 
+          items={colorItems} 
+          onItemChange={handleItemChange} 
+          onItemSelect={handleItemSelect}
+        />
       </div>
     </Box>
   );
