@@ -7,6 +7,7 @@ import { open } from '@tauri-apps/plugin-dialog';
 import { invoke } from '@tauri-apps/api/core';
 import pkg from '../../package.json' assert { type: 'json' };
 const version = pkg.version;
+import './globals.css';
 
 const fontItemsDef = [
   { label: "標準のフォント名", type: "text", internalID: "DefaultFamily", internalGroup: "Font" },
@@ -221,7 +222,14 @@ const App: React.FC = () => {
         <Button variant="contained" color="primary" onClick={saveConfig} size="large">
           設定を保存
         </Button>
-        <Button variant="outlined" onClick={selectFileAndLoad}>設定ファイルを選択</Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={selectFileAndLoad}
+          id="select-file-button"
+        >
+          設定ファイルを選択
+        </Button>
       </Box>
       <div
         style={{
