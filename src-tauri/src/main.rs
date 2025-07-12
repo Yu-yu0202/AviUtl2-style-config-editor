@@ -72,6 +72,11 @@ fn format_config(data: serde_json::Value) -> Result<String, String> {
     Ok(result.trim().to_string())
 }
 
+#[tauri::command]
+fn get_default_config() -> String {
+    include_str!("../style.default.conf").to_string()
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -80,7 +85,8 @@ fn main() {
             read_config_file,
             write_config_file,
             parse_config,
-            format_config
+            format_config,
+            get_default_config
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

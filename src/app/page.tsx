@@ -192,6 +192,7 @@ const App: React.FC = () => {
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 
 ` + formatConfigForSave(confData);
+
       await invoke('write_config_file', { path: currentFilePath, content });
       alert('設定を保存しました！');
     } catch (error) {
@@ -215,6 +216,24 @@ const App: React.FC = () => {
     }
   };
 
+  const overwriteDefaultConfig = async () => {
+    try {
+      const defaultConfig = `; style.conf default setting\n; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}\n; AviUtl2 Style.conf Editor v${version} by Yu-yu0202\n\n` + await invoke<string>('get_default_config');
+      const defaultConfJson = await invoke('parse_config', { content: defaultConfig });
+      await invoke('write_config_file', { path: currentFilePath, content: defaultConfig });
+      setConfData(defaultConfJson as Record<string, Record<string, string>>);
+      const data = defaultConfJson as Record<string, Record<string, string>>;
+      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      alert('デフォルト設定で上書きしました！');
+    } catch(e: unknown) {
+      console.error('デフォルト設定の取得に失敗しました:', e);
+      alert('デフォルト設定の取得に失敗しました。');
+    }
+  }
+
   return (
     <Box sx={{ p: 3 }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>AviUtl2 Style.conf Editor</h1>
@@ -229,6 +248,13 @@ const App: React.FC = () => {
           id="select-file-button"
         >
           設定ファイルを選択
+        </Button>
+        <Button
+          variant="contained"
+          color="warning"
+          onClick={overwriteDefaultConfig}
+        >
+          全てデフォルト設定で上書き
         </Button>
       </Box>
       <div
