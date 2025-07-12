@@ -330,7 +330,7 @@ const App: React.FC = () => {
         </Button>
         <Button
           variant="contained"
-          color="secondary"
+          color="warning"
           onClick={() => resetSelectedItems()}
         >
           選択項目をデフォルトに戻す
