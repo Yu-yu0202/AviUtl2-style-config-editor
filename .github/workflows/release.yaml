@@ -25,17 +25,20 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Install sccache
-        uses: mozilla-actions/sccache-action@v0.0.3
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 10.12.1
+
       - name: Cache cargo registry
         uses: actions/cache@v4
         with:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('src-tauri/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-registry-
+            ${{ runner.os }}-cargo-
 
       - name: Cache Rust target
         uses: actions/cache@v4
@@ -44,30 +47,35 @@ jobs:
           key: ${{ runner.os }}-rust-target-${{ hashFiles('src-tauri/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-rust-target-
-      - name: Cache node_modules
+
+      - name: Cache node_modules and pnpm store
         uses: actions/cache@v4
         with:
           path: |
             node_modules
             ~/.pnpm-store
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10.12.1
+            ${{ runner.os }}-pnpm-
 
       - name: Install frontend dependencies
         run: pnpm install
+
       - name: Build frontend
         run: pnpm build
+
+      - name: Install sccache
+        uses: mozilla-actions/sccache-action@v0.0.3
+
+      - name: Set sccache env globally
+        shell: bash
+        run: |
+          echo "RUSTC_WRAPPER=sccache" >> $GITHUB_ENV
+          echo "SCCACHE_CACHE_SIZE=2G" >> $GITHUB_ENV
+
       - name: Build Tauri app (release)
-        env:
-          RUSTC_WRAPPER: sccache
         run: pnpm tauri build
-        working-directory: ./
+
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
