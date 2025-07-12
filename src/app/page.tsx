@@ -187,8 +187,8 @@ const App: React.FC = () => {
     }
     try {
       const content = `; style.conf 
-; Last edited by AviUtl2-Style-Config-Editor at ${new Date().toISOString()}
-; AviUtl2-Style-Config-Editor v${version} by Yu-yu0202
+; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
+; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 
 ` + formatConfigForSave(confData);
       await invoke('write_config_file', { path: currentFilePath, content });
