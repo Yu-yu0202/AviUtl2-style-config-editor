@@ -14,7 +14,8 @@
     "tauri:build": "tauri build",
     "commit": "cz",
     "prepare": "husky",
-    "lint-staged": "lint-staged"
+    "lint-staged": "lint-staged",
+    "postinstall": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
