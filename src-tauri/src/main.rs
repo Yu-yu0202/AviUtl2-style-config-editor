@@ -77,6 +77,11 @@ fn get_default_config() -> String {
     include_str!("../style.default.conf").to_string()
 }
 
+#[tauri::command]
+fn get_program_data_path() -> String {
+    std::env::var("PROGRAMDATA").unwrap_or_else(|_| "C:\\ProgramData".to_string())
+}
+
 fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
@@ -86,7 +91,8 @@ fn main() {
             write_config_file,
             parse_config,
             format_config,
-            get_default_config
+            get_default_config,
+            get_program_data_path
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

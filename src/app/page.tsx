@@ -2,8 +2,16 @@
 
 import React, { useState } from "react";
 import { SettingsCard, SettingsCardProp } from "./components/SettingsCard";
-import { Button, Box } from "@mui/material";
-import { open } from '@tauri-apps/plugin-dialog';
+import { 
+  Button, 
+  Box, 
+  Menu, 
+  MenuItem, 
+  ButtonGroup, 
+  Tooltip
+} from "@mui/material";
+// Icons will be added later when package is properly installed
+import { open, save } from '@tauri-apps/plugin-dialog';
 import { invoke } from '@tauri-apps/api/core';
 import pkg from '../../package.json' assert { type: 'json' };
 const version = pkg.version;
@@ -137,6 +145,7 @@ const App: React.FC = () => {
   const [formatItems, setFormatItems] = useState<SettingsCardProp[]>([]);
   const [currentFilePath, setCurrentFilePath] = useState<string>("");
   const [defaultConfig, setDefaultConfig] = useState<Record<string, Record<string, string>>>({});
+  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
 
   const loadConfig = async (filePath?: string) => {
     if (!filePath) return;
@@ -227,6 +236,89 @@ const App: React.FC = () => {
     }
   };
 
+  const saveAsConfig = async () => {
+    try {
+      const filePath = await save({
+        filters: [{ name: 'Config', extensions: ['conf'] }]
+      });
+      if (filePath) {
+        const content = `; style.conf 
+; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
+; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
+
+` + formatConfigForSave(confData);
+        
+        await invoke('write_config_file', { path: filePath, content });
+        setCurrentFilePath(filePath);
+        alert('設定を保存しました！');
+      }
+    } catch (error) {
+      console.error('設定の保存に失敗しました:', error);
+      alert('設定の保存に失敗しました。');
+    }
+  };
+
+  const saveConfigToProgramData = async () => {
+    if (!currentFilePath) {
+      alert('ファイルが選択されていません。');
+      return;
+    }
+    try {
+      const content = `; style.conf
+; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
+; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
+` + formatConfigForSave(confData);
+      const programDataPath = await invoke('get_program_data_path');
+      const targetPath = `${programDataPath}\\aviutl2\\style.conf`;
+      await invoke('write_config_file', { path: targetPath, content });
+      alert('設定をAviUtl2推奨場所に保存しました！');
+    } catch(e: unknown) {
+      console.error('設定の保存に失敗しました:', e);
+      alert('設定の保存に失敗しました。');
+    }
+  }
+  const createBackup = async () => {
+    if (!currentFilePath) {
+      alert('ファイルが選択されていません。');
+      return;
+    }
+    try {
+      const backupPath = currentFilePath + '.bak';
+      const content = `; style.conf backup
+; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
+; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
+` + formatConfigForSave(confData);
+      await invoke('write_config_file', { path: backupPath, content });
+      alert('バックアップを作成しました！');
+    } catch (error) {
+      console.error('バックアップの作成に失敗しました:', error);
+      alert('バックアップの作成に失敗しました。');
+    }
+  }
+  const restoreBackup = async () => {
+    if (!currentFilePath) {
+      alert('ファイルが選択されていません。');
+      return;
+    }
+    try {
+      const backupPath = currentFilePath + '.bak';
+      const content = await invoke<string>('read_config_file', { path: backupPath });
+      const confJson = await invoke('parse_config', { content });
+      setConfData(confJson as Record<string, Record<string, string>>);
+      const data = confJson as Record<string, Record<string, string>>;
+      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      await invoke('write_config_file', { path: currentFilePath, content });
+      setCurrentFilePath(currentFilePath);
+      alert('バックアップを復元しました！');
+    } catch (error) {
+      console.error('バックアップの復元に失敗しました:', error);
+      alert('バックアップの復元に失敗しました。');
+    }
+  }
+
   const selectFileAndLoad = async () => {
     try {
       const filePath = await open({
@@ -301,41 +393,124 @@ const App: React.FC = () => {
     alert('デフォルト設定で上書きしました！');
   };
 
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
   return (
     <Box sx={{ p: 3 }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>AviUtl2 Style.conf Editor</h1>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mb: 3, gap: 2 }}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => saveConfig()}
-          size="large"
-        >
-          設定を保存
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={selectFileAndLoad}
-          id="select-file-button"
-        >
-          設定ファイルを選択
-        </Button>
-        <Button
-          variant="contained"
-          color="warning"
-          onClick={overwriteDefaultConfig}
-        >
-          全てデフォルト設定で上書き
-        </Button>
-        <Button
-          variant="contained"
-          color="warning"
-          onClick={() => resetSelectedItems()}
-        >
-          選択項目をデフォルトに戻す
-        </Button>
+      
+      {/* メインボタングループ */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        mb: 3, 
+        gap: 2,
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: 'center'
+      }}>
+        <ButtonGroup variant="contained" size="large">
+          <Tooltip title="現在の設定をファイルに保存します">
+            <Button
+              color="primary"
+              onClick={() => saveConfig()}
+            >
+              設定を保存
+            </Button>
+          </Tooltip>
+          <Tooltip title="新しいファイル名で設定を保存します">
+            <Button
+              color="primary"
+              onClick={saveAsConfig}
+            >
+              名前を付けて保存
+            </Button>
+          </Tooltip>
+          <Tooltip title="現在の設定をAviUtl2で推奨されている場所に保存します">
+            <Button
+              color="primary"
+              onClick={saveConfigToProgramData}
+            >
+              AviUtl2推奨場所に保存
+            </Button>
+          </Tooltip>
+          <Tooltip title="現在の設定のバックアップを作成します（推奨）">
+            <Button
+              color="primary"
+              onClick={createBackup}
+            >
+              バックアップ作成（推奨）
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
+        
+        <ButtonGroup variant="contained">
+          <Button
+            color="primary"
+            onClick={selectFileAndLoad}
+            id="select-file-button"
+          >
+            ファイルを開く
+          </Button>
+          <Button
+            color="primary"
+            onClick={handleMenuOpen}
+          >
+            その他の操作
+          </Button>
+        </ButtonGroup>
       </Box>
+
+      {/* 現在のファイルパス表示 */}
+      {currentFilePath && (
+        <Box
+          sx={{
+            textAlign: 'center',
+            mb: 2,
+            p: 1,
+            bgcolor: 'background.paper',
+            border: 1,
+            borderColor: 'divider',
+            borderRadius: 1,
+            boxShadow: 1,
+            color: 'text.primary', // ← ここで色を指定
+            wordBreak: 'break-all',
+            fontSize: '0.9rem',
+          }}
+        >
+          現在のファイル: {currentFilePath}
+        </Box>
+      )}
+
+      {/* ドロップダウンメニュー */}
+      <Menu
+        anchorEl={menuAnchorEl}
+        open={Boolean(menuAnchorEl)}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={() => { overwriteDefaultConfig(); handleMenuClose(); }}>
+          全てデフォルト設定で上書き
+        </MenuItem>
+        <MenuItem onClick={() => { resetSelectedItems(); handleMenuClose(); }}>
+          選択項目をデフォルトに戻す
+        </MenuItem>
+        <MenuItem onClick={() => { restoreBackup(); handleMenuClose(); }}>
+          バックアップを復元
+        </MenuItem>
+      </Menu>
       <div
         style={{
           display: "grid",
