@@ -1,6 +1,10 @@
 # AviUtl2 Style Config Editor
 
 AviUtl2のstyle.confファイルを編集するためのTauriアプリケーションです。
+<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/82581f3a-6817-4a95-97b5-33643d5acf40" />
+<img width="1202" height="832" alt="image" src="https://github.com/user-attachments/assets/c37217e2-47d0-460a-bd70-eda3702cf944" />
+
+
 
 ## 開発環境のセットアップ
 
