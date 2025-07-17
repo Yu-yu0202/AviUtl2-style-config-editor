@@ -10,7 +10,6 @@ import {
   ButtonGroup, 
   Tooltip
 } from "@mui/material";
-// Icons will be added later when package is properly installed
 import { open, save } from '@tauri-apps/plugin-dialog';
 import { invoke } from '@tauri-apps/api/core';
 import pkg from '../../package.json' assert { type: 'json' };
@@ -159,7 +158,6 @@ const App: React.FC = () => {
       setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
 
-      // Load default config when loading a file for the first time
       if (!defaultConfig.Font) {
         const defaultConfigStr = await invoke<string>('get_default_config');
         const defaultConfJson = await invoke('parse_config', { content: defaultConfigStr });
@@ -358,7 +356,6 @@ const App: React.FC = () => {
       return;
     }
 
-    // 新しいconfDataを作成
     const newConfData = { ...confData };
 
     const updateSelectedItems = (
@@ -369,7 +366,6 @@ const App: React.FC = () => {
       const newItems = items.map(item => {
         if (item.isSelected) {
           const defaultValue = defaultConfig[group]?.[item.internalID] ?? "";
-          // confDataを更新
           if (!newConfData[group]) {
             newConfData[group] = {};
           }
@@ -436,7 +432,7 @@ const App: React.FC = () => {
               color="primary"
               onClick={saveConfigToProgramData}
             >
-              AviUtl2推奨場所に保存
+              AviUtl2推奨場所に保存（推奨）
             </Button>
           </Tooltip>
           <Tooltip title="現在の設定のバックアップを作成します（推奨）">
@@ -478,7 +474,7 @@ const App: React.FC = () => {
             borderColor: 'divider',
             borderRadius: 1,
             boxShadow: 1,
-            color: 'text.primary', // ← ここで色を指定
+            color: 'text.primary',
             wordBreak: 'break-all',
             fontSize: '0.9rem',
           }}

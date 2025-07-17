@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*.*.*'
+      - '*[Tt][Ee][Ss][Tt]*'
   workflow_dispatch:
 
 permissions:
