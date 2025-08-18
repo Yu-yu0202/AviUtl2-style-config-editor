@@ -35,7 +35,7 @@ const colorItemsDef = [
   { label: "フッターの背景の色", type: "color", internalID: "Footer", internalGroup: "Color" },
   { label: "フッターの進捗の色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
   { label: "グループの色", type: "color", internalID: "Grouping", internalGroup: "Color" },
-  { label: "グループホバーの色", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
+  { label: "グループの色 (ホバー時)", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
   { label: "グループ選択時の色", type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
   { label: "タイトルヘッダー背景の色", type: "color", internalID: "TitleHeader", internalGroup: "Color" },
   { label: "選択枠線の色", type: "color", internalID: "BorderSelect", internalGroup: "Color" },
