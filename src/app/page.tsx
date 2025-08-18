@@ -29,11 +29,11 @@ const fontItemsDef = [
 ];
 
 const colorItemsDef = [
-  { label: "背景色", type: "color", internalID: "Background", internalGroup: "Color" },
-  { label: "ウィンドウ枠線色", type: "color", internalID: "WindowBorder", internalGroup: "Color" },
-  { label: "ウィンドウ間の背景色", type: "color", internalID: "WindowSeparator", internalGroup: "Color" },
-  { label: "フッターの背景色", type: "color", internalID: "Footer", internalGroup: "Color" },
-  { label: "フッターの進捗色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
+  { label: "背景の色", type: "color", internalID: "Background", internalGroup: "Color" },
+  { label: "ウィンドウ枠線の色", type: "color", internalID: "WindowBorder", internalGroup: "Color" },
+  { label: "ウィンドウ間の背景の色", type: "color", internalID: "WindowSeparator", internalGroup: "Color" },
+  { label: "フッターの背景の色", type: "color", internalID: "Footer", internalGroup: "Color" },
+  { label: "フッターの進捗の色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
   { label: "グループの色", type: "color", internalID: "Grouping", internalGroup: "Color" },
   { label: "グループホバーの色", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
   { label: "グループ選択時の色", type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
