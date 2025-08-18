@@ -32,69 +32,69 @@ const colorItemsDef = [
   { label: "背景色", type: "color", internalID: "Background", internalGroup: "Color" },
   { label: "ウィンドウ枠線色", type: "color", internalID: "WindowBorder", internalGroup: "Color" },
   { label: "ウィンドウ間の背景色", type: "color", internalID: "WindowSeparator", internalGroup: "Color" },
-  { label: "フッター背景色", type: "color", internalID: "Footer", internalGroup: "Color" },
-  { label: "フッター進捗色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
-  { label: "グループ色", type: "color", internalID: "Grouping", internalGroup: "Color" },
-  { label: "グループホバー色", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
-  { label: "グループ選択色", type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
-  { label: "タイトルヘッダー背景色", type: "color", internalID: "TitleHeader", internalGroup: "Color" },
-  { label: "選択枠線色", type: "color", internalID: "BorderSelect", internalGroup: "Color" },
-  { label: "枠線色", type: "color", internalID: "Border", internalGroup: "Color" },
-  { label: "フォーカス枠線色", type: "color", internalID: "BorderFocus", internalGroup: "Color" },
-  { label: "テキスト色", type: "color", internalID: "Text", internalGroup: "Color" },
-  { label: "テキスト無効色", type: "color", internalID: "TextDisable", internalGroup: "Color" },
-  { label: "テキスト選択色", type: "color", internalID: "TextSelect", internalGroup: "Color" },
-  { label: "ボタン背景色", type: "color", internalID: "ButtonBody", internalGroup: "Color" },
-  { label: "ボタン背景色(ホバー)", type: "color", internalID: "ButtonBodyHover", internalGroup: "Color" },
-  { label: "ボタン背景色(押下)", type: "color", internalID: "ButtonBodyPress", internalGroup: "Color" },
-  { label: "ボタン背景色(無効)", type: "color", internalID: "ButtonBodyDisable", internalGroup: "Color" },
-  { label: "ボタン背景色(選択)", type: "color", internalID: "ButtonBodySelect", internalGroup: "Color" },
-  { label: "スライダーカラー", type: "color", internalID: "SliderCursor", internalGroup: "Color" },
-  { label: "トラックバー範囲色", type: "color", internalID: "TrackBarRange", internalGroup: "Color" },
-  { label: "ズームゲージ色", type: "color", internalID: "ZoomGauge", internalGroup: "Color" },
-  { label: "ズームゲージホバー色", type: "color", internalID: "ZoomGaugeHover", internalGroup: "Color" },
-  { label: "ズームゲージオフ色", type: "color", internalID: "ZoomGaugeOff", internalGroup: "Color" },
-  { label: "ズームゲージオフホバー色", type: "color", internalID: "ZoomGaugeOffHover", internalGroup: "Color" },
-  { label: "フレームカーソル色", type: "color", internalID: "FrameCursor", internalGroup: "Color" },
-  { label: "フレームカーソルワイド色", type: "color", internalID: "FrameCursorWide", internalGroup: "Color" },
-  { label: "プレイヤーカーソル色", type: "color", internalID: "PlayerCursor", internalGroup: "Color" },
-  { label: "ガイドライン色", type: "color", internalID: "GuideLine", internalGroup: "Color" },
-  { label: "レイヤー背景色", type: "color", internalID: "Layer", internalGroup: "Color" },
-  { label: "レイヤーヘッダー背景色", type: "color", internalID: "LayerHeader", internalGroup: "Color" },
-  { label: "レイヤーホバー色", type: "color", internalID: "LayerHover", internalGroup: "Color" },
-  { label: "レイヤー無効色", type: "color", internalID: "LayerDisable", internalGroup: "Color" },
-  { label: "レイヤー範囲背景色", type: "color", internalID: "LayerRange", internalGroup: "Color" },
-  { label: "レイヤー範囲枠線色", type: "color", internalID: "LayerRangeFrame", internalGroup: "Color" },
-  { label: "映像オブジェクト色", type: "color", internalID: "ObjectVideo", internalGroup: "Color" },
-  { label: "映像オブジェクト色(選択)", type: "color", internalID: "ObjectVideoSelect", internalGroup: "Color" },
-  { label: "音声オブジェクト色", type: "color", internalID: "ObjectAudio", internalGroup: "Color" },
-  { label: "音声オブジェクト色(選択)", type: "color", internalID: "ObjectAudioSelect", internalGroup: "Color" },
-  { label: "制御オブジェクト色", type: "color", internalID: "ObjectControl", internalGroup: "Color" },
-  { label: "制御オブジェクト色(選択)", type: "color", internalID: "ObjectControlSelect", internalGroup: "Color" },
-  { label: "映像フィルタオブジェクト色", type: "color", internalID: "ObjectVideoFilter", internalGroup: "Color" },
-  { label: "映像フィルタオブジェクト色(選択)", type: "color", internalID: "ObjectVideoFilterSelect", internalGroup: "Color" },
-  { label: "音声フィルタオブジェクト色", type: "color", internalID: "ObjectAudioFilter", internalGroup: "Color" },
-  { label: "音声フィルタオブジェクト色(選択)", type: "color", internalID: "ObjectAudioFilterSelect", internalGroup: "Color" },
-  { label: "オブジェクト枠色(ホバー)", type: "color", internalID: "ObjectHover", internalGroup: "Color" },
-  { label: "オブジェクト枠色(フォーカス)", type: "color", internalID: "ObjectFocus", internalGroup: "Color" },
-  { label: "オブジェクト中間点色", type: "color", internalID: "ObjectSection", internalGroup: "Color" },
-  { label: "クリッピングオブジェクト色(下部)", type: "color", internalID: "ClippingObject", internalGroup: "Color" },
-  { label: "クリッピングオブジェクトマスク色", type: "color", internalID: "ClippingObjectMask", internalGroup: "Color" },
-  { label: "アンカー枠色", type: "color", internalID: "Anchor", internalGroup: "Color" },
-  { label: "アンカー線色", type: "color", internalID: "AnchorLine", internalGroup: "Color" },
-  { label: "アンカー枠色(開始)", type: "color", internalID: "AnchorIn", internalGroup: "Color" },
-  { label: "アンカー枠色(終了)", type: "color", internalID: "AnchorOut", internalGroup: "Color" },
-  { label: "アンカー枠色(ホバー)", type: "color", internalID: "AnchorHover", internalGroup: "Color" },
-  { label: "アンカー枠色(選択)", type: "color", internalID: "AnchorSelect", internalGroup: "Color" },
-  { label: "アンカー枠縁色", type: "color", internalID: "AnchorEdge", internalGroup: "Color" },
-  { label: "中心点色(グループ)", type: "color", internalID: "CenterGroup", internalGroup: "Color" },
-  { label: "HandleX", type: "color", internalID: "HandleX", internalGroup: "Color" },
-  { label: "HandleY", type: "color", internalID: "HandleY", internalGroup: "Color" },
-  { label: "HandleZ", type: "color", internalID: "HandleZ", internalGroup: "Color" },
-  { label: "HandleX(ホバー)", type: "color", internalID: "HandleXHover", internalGroup: "Color" },
-  { label: "HandleY(ホバー)", type: "color", internalID: "HandleYHover", internalGroup: "Color" },
-  { label: "HandleZ(ホバー)", type: "color", internalID: "HandleZHover", internalGroup: "Color" },
-  { label: "表示領域外色", type: "color", internalID: "OutsideDisplay", internalGroup: "Color" },
+  { label: "フッターの背景色", type: "color", internalID: "Footer", internalGroup: "Color" },
+  { label: "フッターの進捗色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
+  { label: "グループの色", type: "color", internalID: "Grouping", internalGroup: "Color" },
+  { label: "グループホバーの色", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
+  { label: "グループ選択時の色", type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
+  { label: "タイトルヘッダー背景の色", type: "color", internalID: "TitleHeader", internalGroup: "Color" },
+  { label: "選択枠線の色", type: "color", internalID: "BorderSelect", internalGroup: "Color" },
+  { label: "枠線の色", type: "color", internalID: "Border", internalGroup: "Color" },
+  { label: "フォーカス枠線の色", type: "color", internalID: "BorderFocus", internalGroup: "Color" },
+  { label: "テキストの色", type: "color", internalID: "Text", internalGroup: "Color" },
+  { label: "テキスト無効の色", type: "color", internalID: "TextDisable", internalGroup: "Color" },
+  { label: "テキスト選択の色", type: "color", internalID: "TextSelect", internalGroup: "Color" },
+  { label: "ボタン背景の色", type: "color", internalID: "ButtonBody", internalGroup: "Color" },
+  { label: "ボタン背景の色 (ホバー時)", type: "color", internalID: "ButtonBodyHover", internalGroup: "Color" },
+  { label: "ボタン背景の色 (押下時)", type: "color", internalID: "ButtonBodyPress", internalGroup: "Color" },
+  { label: "ボタン背景の色 (無効時)", type: "color", internalID: "ButtonBodyDisable", internalGroup: "Color" },
+  { label: "ボタン背景の色 (選択時)", type: "color", internalID: "ButtonBodySelect", internalGroup: "Color" },
+  { label: "スライダーの色", type: "color", internalID: "SliderCursor", internalGroup: "Color" },
+  { label: "トラックバー範囲の色", type: "color", internalID: "TrackBarRange", internalGroup: "Color" },
+  { label: "ズームゲージの色", type: "color", internalID: "ZoomGauge", internalGroup: "Color" },
+  { label: "ズームゲージホバーの色", type: "color", internalID: "ZoomGaugeHover", internalGroup: "Color" },
+  { label: "ズームゲージオフの色", type: "color", internalID: "ZoomGaugeOff", internalGroup: "Color" },
+  { label: "ズームゲージオフホバーの色", type: "color", internalID: "ZoomGaugeOffHover", internalGroup: "Color" },
+  { label: "フレームカーソルの色", type: "color", internalID: "FrameCursor", internalGroup: "Color" },
+  { label: "フレームカーソルワイドの色", type: "color", internalID: "FrameCursorWide", internalGroup: "Color" },
+  { label: "プレイヤーカーソルの色", type: "color", internalID: "PlayerCursor", internalGroup: "Color" },
+  { label: "ガイドラインの色", type: "color", internalID: "GuideLine", internalGroup: "Color" },
+  { label: "レイヤー背景の色", type: "color", internalID: "Layer", internalGroup: "Color" },
+  { label: "レイヤーヘッダー背景の色", type: "color", internalID: "LayerHeader", internalGroup: "Color" },
+  { label: "レイヤーホバーの色", type: "color", internalID: "LayerHover", internalGroup: "Color" },
+  { label: "レイヤー無効の色", type: "color", internalID: "LayerDisable", internalGroup: "Color" },
+  { label: "レイヤー範囲背景の色", type: "color", internalID: "LayerRange", internalGroup: "Color" },
+  { label: "レイヤー範囲枠線の色", type: "color", internalID: "LayerRangeFrame", internalGroup: "Color" },
+  { label: "映像オブジェクトの色", type: "color", internalID: "ObjectVideo", internalGroup: "Color" },
+  { label: "映像オブジェクトの色 (選択時)", type: "color", internalID: "ObjectVideoSelect", internalGroup: "Color" },
+  { label: "音声オブジェクトの色", type: "color", internalID: "ObjectAudio", internalGroup: "Color" },
+  { label: "音声オブジェクトの色 (選択時)", type: "color", internalID: "ObjectAudioSelect", internalGroup: "Color" },
+  { label: "制御オブジェクトの色", type: "color", internalID: "ObjectControl", internalGroup: "Color" },
+  { label: "制御オブジェクトの色 (選択時)", type: "color", internalID: "ObjectControlSelect", internalGroup: "Color" },
+  { label: "映像フィルタオブジェクトの色", type: "color", internalID: "ObjectVideoFilter", internalGroup: "Color" },
+  { label: "映像フィルタオブジェクトの色 (選択時)", type: "color", internalID: "ObjectVideoFilterSelect", internalGroup: "Color" },
+  { label: "音声フィルタオブジェクトの色", type: "color", internalID: "ObjectAudioFilter", internalGroup: "Color" },
+  { label: "音声フィルタオブジェクトの色 (選択時)", type: "color", internalID: "ObjectAudioFilterSelect", internalGroup: "Color" },
+  { label: "オブジェクト枠の色 (ホバー時)", type: "color", internalID: "ObjectHover", internalGroup: "Color" },
+  { label: "オブジェクト枠の色 (フォーカス時)", type: "color", internalID: "ObjectFocus", internalGroup: "Color" },
+  { label: "オブジェクト中間点の色", type: "color", internalID: "ObjectSection", internalGroup: "Color" },
+  { label: "クリッピングオブジェクトの色 (下部)", type: "color", internalID: "ClippingObject", internalGroup: "Color" },
+  { label: "クリッピングオブジェクトマスクの色", type: "color", internalID: "ClippingObjectMask", internalGroup: "Color" },
+  { label: "アンカー枠の色", type: "color", internalID: "Anchor", internalGroup: "Color" },
+  { label: "アンカー線の色", type: "color", internalID: "AnchorLine", internalGroup: "Color" },
+  { label: "アンカー枠の色 (開始)", type: "color", internalID: "AnchorIn", internalGroup: "Color" },
+  { label: "アンカー枠の色 (終了)", type: "color", internalID: "AnchorOut", internalGroup: "Color" },
+  { label: "アンカー枠の色 (ホバー時)", type: "color", internalID: "AnchorHover", internalGroup: "Color" },
+  { label: "アンカー枠の色 (選択時)", type: "color", internalID: "AnchorSelect", internalGroup: "Color" },
+  { label: "アンカー枠縁の色", type: "color", internalID: "AnchorEdge", internalGroup: "Color" },
+  { label: "中心点の色 (グループ)", type: "color", internalID: "CenterGroup", internalGroup: "Color" },
+  { label: "ハンドル X", type: "color", internalID: "HandleX", internalGroup: "Color" },
+  { label: "ハンドル Y", type: "color", internalID: "HandleY", internalGroup: "Color" },
+  { label: "ハンドル Z", type: "color", internalID: "HandleZ", internalGroup: "Color" },
+  { label: "ハンドル X (ホバー時)", type: "color", internalID: "HandleXHover", internalGroup: "Color" },
+  { label: "ハンドル Y (ホバー時)", type: "color", internalID: "HandleYHover", internalGroup: "Color" },
+  { label: "ハンドル Z (ホバー時)", type: "color", internalID: "HandleZHover", internalGroup: "Color" },
+  { label: "表示領域外の色", type: "color", internalID: "OutsideDisplay", internalGroup: "Color" },
 ];
 
 const layoutItemsDef = [
@@ -105,19 +105,19 @@ const layoutItemsDef = [
   { label: "タイムゲージの高さ", type: "number", internalID: "TimeGaugeHeight", internalGroup: "Layout" },
   { label: "レイヤーの高さ", type: "number", internalID: "LayerHeight", internalGroup: "Layout" },
   { label: "レイヤー名の幅", type: "number", internalID: "LayerHeaderWidth", internalGroup: "Layout" },
-  { label: "設定項目ヘッダー幅", type: "number", internalID: "SettingItemHeaderWidth", internalGroup: "Layout" },
+  { label: "設定項目ヘッダーの幅", type: "number", internalID: "SettingItemHeaderWidth", internalGroup: "Layout" },
   { label: "設定項目高さ", type: "number", internalID: "SettingItemHeight", internalGroup: "Layout" },
-  { label: "設定項目マージン幅", type: "number", internalID: "SettingItemMarginWidth", internalGroup: "Layout" },
-  { label: "設定ヘッダー高さ", type: "number", internalID: "SettingHeaderHeight", internalGroup: "Layout" },
-  { label: "プレイヤーコントローラー高さ", type: "number", internalID: "PlayerControlHeight", internalGroup: "Layout" },
-  { label: "メディアエクスプローラーヘッダー高さ", type: "number", internalID: "ExplorerHeaderHeight", internalGroup: "Layout" },
-  { label: "メディアエクスプローラー数", type: "number", internalID: "ExplorerWindowNum", internalGroup: "Layout" },
+  { label: "設定項目マージンの幅", type: "number", internalID: "SettingItemMarginWidth", internalGroup: "Layout" },
+  { label: "設定ヘッダーの高さ", type: "number", internalID: "SettingHeaderHeight", internalGroup: "Layout" },
+  { label: "プレイヤーコントローラーの高さ", type: "number", internalID: "PlayerControlHeight", internalGroup: "Layout" },
+  { label: "メディアエクスプローラーヘッダーの高さ", type: "number", internalID: "ExplorerHeaderHeight", internalGroup: "Layout" },
+  { label: "メディアエクスプローラーの数", type: "number", internalID: "ExplorerWindowNum", internalGroup: "Layout" },
   { label: "リスト選択項目の高さ", type: "number", internalID: "ListItemHeight", internalGroup: "Layout" },
 ];
 
 const formatItemsDef = [
-  { label: "フッター左表示フォーマット", type: "text", internalID: "FooterLeft", internalGroup: "Format" },
-  { label: "フッター右表示フォーマット", type: "text", internalID: "FooterRight", internalGroup: "Format" },
+  { label: "フッター左表示形式", type: "text", internalID: "FooterLeft", internalGroup: "Format" },
+  { label: "フッター右表示形式", type: "text", internalID: "FooterRight", internalGroup: "Format" },
 ];
 
 function formatConfigForSave(confData: Record<string, Record<string, string>>): string {
@@ -269,7 +269,7 @@ const App: React.FC = () => {
       const programDataPath = await invoke('get_program_data_path');
       const targetPath = `${programDataPath}\\aviutl2\\style.conf`;
       await invoke('write_config_file', { path: targetPath, content });
-      alert('設定をAviUtl2推奨場所に保存しました！');
+      alert('設定を AviUtl2 推奨ディレクトリに保存しました！');
     } catch(e: unknown) {
       console.error('設定の保存に失敗しました:', e);
       alert('設定の保存に失敗しました。');
@@ -310,10 +310,10 @@ const App: React.FC = () => {
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       await invoke('write_config_file', { path: currentFilePath, content });
       setCurrentFilePath(currentFilePath);
-      alert('バックアップを復元しました！');
+      alert('バックアップから復元しました！');
     } catch (error) {
-      console.error('バックアップの復元に失敗しました:', error);
-      alert('バックアップの復元に失敗しました。');
+      console.error('バックアップからの復元に失敗しました:', error);
+      alert('バックアップからの復元に失敗しました。');
     }
   }
 
@@ -328,7 +328,7 @@ const App: React.FC = () => {
         await loadConfig(filePath as string);
       }
     } catch (error) {
-      console.error('ファイル選択に失敗しました:', error);
+      console.error('ファイルの選択に失敗しました:', error);
     }
   };
 
@@ -343,16 +343,16 @@ const App: React.FC = () => {
       setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      alert('デフォルト設定で上書きしました！');
+      alert('既定の設定を上書きしました！');
     } catch(e: unknown) {
-      console.error('デフォルト設定の取得に失敗しました:', e);
-      alert('デフォルト設定の取得に失敗しました。');
+      console.error('既定の設定の取得に失敗しました:', e);
+      alert('既定の設定の取得に失敗しました。');
     }
   }
 
   const resetSelectedItems = async () => {
     if (!defaultConfig.Font) {
-      alert('デフォルト設定が読み込まれていません。');
+      alert('既定の設定が読み込まれていません。');
       return;
     }
 
@@ -386,7 +386,7 @@ const App: React.FC = () => {
     setConfData(newConfData);
 
     await saveConfig(false, newConfData);
-    alert('デフォルト設定で上書きしました！');
+    alert('既定の設定を上書きしました！');
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -411,7 +411,7 @@ const App: React.FC = () => {
         alignItems: 'center'
       }}>
         <ButtonGroup variant="contained" size="large">
-          <Tooltip title="現在の設定をファイルに保存します">
+          <Tooltip title="現在の設定をファイルに保存します。">
             <Button
               color="primary"
               onClick={() => saveConfig()}
@@ -419,7 +419,7 @@ const App: React.FC = () => {
               設定を保存
             </Button>
           </Tooltip>
-          <Tooltip title="新しいファイル名で設定を保存します">
+          <Tooltip title="新しいファイル名で設定を保存します。">
             <Button
               color="primary"
               onClick={saveAsConfig}
@@ -427,20 +427,20 @@ const App: React.FC = () => {
               名前を付けて保存
             </Button>
           </Tooltip>
-          <Tooltip title="現在の設定をAviUtl2で推奨されている場所に保存します">
+          <Tooltip title="現在の設定を AviUtl2 で推奨されているディレクトリに保存します。">
             <Button
               color="primary"
               onClick={saveConfigToProgramData}
             >
-              AviUtl2推奨場所に保存（推奨）
+              AviUtl2 のディレクトリに保存 (推奨)
             </Button>
           </Tooltip>
-          <Tooltip title="現在の設定のバックアップを作成します（推奨）">
+          <Tooltip title="現在の設定のバックアップを作成します。(推奨)">
             <Button
               color="primary"
               onClick={createBackup}
             >
-              バックアップ作成（推奨）
+              バックアップを作成 (推奨)
             </Button>
           </Tooltip>
         </ButtonGroup>
@@ -498,13 +498,13 @@ const App: React.FC = () => {
         }}
       >
         <MenuItem onClick={() => { overwriteDefaultConfig(); handleMenuClose(); }}>
-          全てデフォルト設定で上書き
+          すべて既定の設定で上書き
         </MenuItem>
         <MenuItem onClick={() => { resetSelectedItems(); handleMenuClose(); }}>
-          選択項目をデフォルトに戻す
+          選択した項目を既定に復元
         </MenuItem>
         <MenuItem onClick={() => { restoreBackup(); handleMenuClose(); }}>
-          バックアップを復元
+          バックアップから復元
         </MenuItem>
       </Menu>
       <div
@@ -533,7 +533,7 @@ const App: React.FC = () => {
             onItemSelect={handleItemSelect}
           />
           <SettingsCard 
-            title="フォーマットの設定" 
+            title="形式の設定" 
             items={formatItems} 
             onItemChange={handleItemChange} 
             onItemSelect={handleItemSelect}
