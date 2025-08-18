@@ -269,7 +269,7 @@ const App: React.FC = () => {
       const programDataPath = await invoke('get_program_data_path');
       const targetPath = `${programDataPath}\\aviutl2\\style.conf`;
       await invoke('write_config_file', { path: targetPath, content });
-      alert('設定を AviUtl2 推奨ディレクトリに保存しました！');
+      alert('設定を AviUtl2 の推奨ディレクトリに保存しました！');
     } catch(e: unknown) {
       console.error('設定の保存に失敗しました:', e);
       alert('設定の保存に失敗しました。');
@@ -435,7 +435,7 @@ const App: React.FC = () => {
               AviUtl2 のディレクトリに保存 (推奨)
             </Button>
           </Tooltip>
-          <Tooltip title="現在の設定のバックアップを作成します。(推奨)">
+          <Tooltip title="現在の設定のバックアップを作成します (推奨)">
             <Button
               color="primary"
               onClick={createBackup}
