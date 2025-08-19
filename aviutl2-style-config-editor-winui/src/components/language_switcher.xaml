@@ -1,0 +1,9 @@
+<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="LanguageSwitcher">
+    <ComboBox x:Name="LanguageComboBox" Width="120">
+        <ComboBoxItem Content="日本語" Tag="ja" />
+        <ComboBoxItem Content="English" Tag="en" />
+    </ComboBox>
+</UserControl>

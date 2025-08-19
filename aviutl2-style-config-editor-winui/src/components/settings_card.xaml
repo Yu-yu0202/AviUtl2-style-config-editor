@@ -1,0 +1,11 @@
+<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="SettingsCard">
+    <Border BorderBrush="Gray" BorderThickness="1" Padding="12" Margin="8">
+        <StackPanel>
+            <TextBlock Text="設定" FontWeight="Bold" FontSize="16" />
+            <!-- 設定項目をここに追加 -->
+        </StackPanel>
+    </Border>
+</UserControl>
