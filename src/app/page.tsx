@@ -15,112 +15,115 @@ import { invoke } from '@tauri-apps/api/core';
 import pkg from '../../package.json' assert { type: 'json' };
 const version = pkg.version;
 import './globals.css';
+import { useLanguage } from './contexts/LanguageContext';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
+import type { TranslationKey } from './i18n/translations';
 
 const fontItemsDef = [
-  { label: "標準のフォント名", type: "text", internalID: "DefaultFamily", internalGroup: "Font" },
-  { label: "標準のコントロールのフォント", type: "number", internalID: "Control", internalGroup: "Font" },
-  { label: "エディットコントロールのフォント", type: "text", internalID: "EditControl", internalGroup: "Font" },
-  { label: "プレビュー時間表示のフォント", type: "number", internalID: "PreviewTime", internalGroup: "Font" },
-  { label: "レイヤー・オブジェクト編集部分のフォント", type: "number", internalID: "LayerObject", internalGroup: "Font" },
-  { label: "フレーム時間ゲージのフォント", type: "number", internalID: "TimeGauge", internalGroup: "Font" },
-  { label: "フッターのフォント", type: "number", internalID: "Footer", internalGroup: "Font" },
-  { label: "テキスト編集のフォント", type: "text", internalID: "TextEdit", internalGroup: "Font" },
-  { label: "ログのフォント", type: "text", internalID: "Log", internalGroup: "Font" },
+  { labelKey: "defaultFontName" as TranslationKey, type: "text", internalID: "DefaultFamily", internalGroup: "Font" },
+  { labelKey: "controlFont" as TranslationKey, type: "number", internalID: "Control", internalGroup: "Font" },
+  { labelKey: "editControlFont" as TranslationKey, type: "text", internalID: "EditControl", internalGroup: "Font" },
+  { labelKey: "previewTimeFont" as TranslationKey, type: "number", internalID: "PreviewTime", internalGroup: "Font" },
+  { labelKey: "layerObjectFont" as TranslationKey, type: "number", internalID: "LayerObject", internalGroup: "Font" },
+  { labelKey: "timeGaugeFont" as TranslationKey, type: "number", internalID: "TimeGauge", internalGroup: "Font" },
+  { labelKey: "footerFont" as TranslationKey, type: "number", internalID: "Footer", internalGroup: "Font" },
+  { labelKey: "textEditFont" as TranslationKey, type: "text", internalID: "TextEdit", internalGroup: "Font" },
+  { labelKey: "logFont" as TranslationKey, type: "text", internalID: "Log", internalGroup: "Font" },
 ];
 
 const colorItemsDef = [
-  { label: "背景の色", type: "color", internalID: "Background", internalGroup: "Color" },
-  { label: "ウィンドウ枠線の色", type: "color", internalID: "WindowBorder", internalGroup: "Color" },
-  { label: "ウィンドウ間の背景の色", type: "color", internalID: "WindowSeparator", internalGroup: "Color" },
-  { label: "フッターの背景の色", type: "color", internalID: "Footer", internalGroup: "Color" },
-  { label: "フッターの進捗の色", type: "color", internalID: "FooterProgress", internalGroup: "Color" },
-  { label: "グループの色", type: "color", internalID: "Grouping", internalGroup: "Color" },
-  { label: "グループの色 (ホバー時)", type: "color", internalID: "GroupingHover", internalGroup: "Color" },
-  { label: "グループ選択時の色", type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
-  { label: "タイトルヘッダー背景の色", type: "color", internalID: "TitleHeader", internalGroup: "Color" },
-  { label: "選択枠線の色", type: "color", internalID: "BorderSelect", internalGroup: "Color" },
-  { label: "枠線の色", type: "color", internalID: "Border", internalGroup: "Color" },
-  { label: "フォーカス枠線の色", type: "color", internalID: "BorderFocus", internalGroup: "Color" },
-  { label: "テキストの色", type: "color", internalID: "Text", internalGroup: "Color" },
-  { label: "テキスト無効の色", type: "color", internalID: "TextDisable", internalGroup: "Color" },
-  { label: "テキスト選択の色", type: "color", internalID: "TextSelect", internalGroup: "Color" },
-  { label: "ボタン背景の色", type: "color", internalID: "ButtonBody", internalGroup: "Color" },
-  { label: "ボタン背景の色 (ホバー時)", type: "color", internalID: "ButtonBodyHover", internalGroup: "Color" },
-  { label: "ボタン背景の色 (押下時)", type: "color", internalID: "ButtonBodyPress", internalGroup: "Color" },
-  { label: "ボタン背景の色 (無効時)", type: "color", internalID: "ButtonBodyDisable", internalGroup: "Color" },
-  { label: "ボタン背景の色 (選択時)", type: "color", internalID: "ButtonBodySelect", internalGroup: "Color" },
-  { label: "スライダーの色", type: "color", internalID: "SliderCursor", internalGroup: "Color" },
-  { label: "トラックバー範囲の色", type: "color", internalID: "TrackBarRange", internalGroup: "Color" },
-  { label: "ズームゲージの色", type: "color", internalID: "ZoomGauge", internalGroup: "Color" },
-  { label: "ズームゲージホバーの色", type: "color", internalID: "ZoomGaugeHover", internalGroup: "Color" },
-  { label: "ズームゲージオフの色", type: "color", internalID: "ZoomGaugeOff", internalGroup: "Color" },
-  { label: "ズームゲージオフホバーの色", type: "color", internalID: "ZoomGaugeOffHover", internalGroup: "Color" },
-  { label: "フレーム選択範囲の色", type: "color", internalID: "FrameRangeSelect", internalGroup: "Color" },
-  { label: "フレーム選択範囲外の色", type: "color", internalID: "FrameRangeOutside", internalGroup: "Color" },
-  { label: "フレームカーソルの色", type: "color", internalID: "FrameCursor", internalGroup: "Color" },
-  { label: "フレームカーソルワイドの色", type: "color", internalID: "FrameCursorWide", internalGroup: "Color" },
-  { label: "プレイヤーカーソルの色", type: "color", internalID: "PlayerCursor", internalGroup: "Color" },
-  { label: "ガイドラインの色", type: "color", internalID: "GuideLine", internalGroup: "Color" },
-  { label: "レイヤー背景の色", type: "color", internalID: "Layer", internalGroup: "Color" },
-  { label: "レイヤーヘッダー背景の色", type: "color", internalID: "LayerHeader", internalGroup: "Color" },
-  { label: "レイヤーホバーの色", type: "color", internalID: "LayerHover", internalGroup: "Color" },
-  { label: "レイヤー無効の色", type: "color", internalID: "LayerDisable", internalGroup: "Color" },
-  { label: "レイヤー範囲背景の色", type: "color", internalID: "LayerRange", internalGroup: "Color" },
-  { label: "レイヤー範囲枠線の色", type: "color", internalID: "LayerRangeFrame", internalGroup: "Color" },
-  { label: "映像オブジェクトの色", type: "color", internalID: "ObjectVideo", internalGroup: "Color" },
-  { label: "映像オブジェクトの色 (選択時)", type: "color", internalID: "ObjectVideoSelect", internalGroup: "Color" },
-  { label: "音声オブジェクトの色", type: "color", internalID: "ObjectAudio", internalGroup: "Color" },
-  { label: "音声オブジェクトの色 (選択時)", type: "color", internalID: "ObjectAudioSelect", internalGroup: "Color" },
-  { label: "制御オブジェクトの色", type: "color", internalID: "ObjectControl", internalGroup: "Color" },
-  { label: "制御オブジェクトの色 (選択時)", type: "color", internalID: "ObjectControlSelect", internalGroup: "Color" },
-  { label: "映像フィルタオブジェクトの色", type: "color", internalID: "ObjectVideoFilter", internalGroup: "Color" },
-  { label: "映像フィルタオブジェクトの色 (選択時)", type: "color", internalID: "ObjectVideoFilterSelect", internalGroup: "Color" },
-  { label: "音声フィルタオブジェクトの色", type: "color", internalID: "ObjectAudioFilter", internalGroup: "Color" },
-  { label: "音声フィルタオブジェクトの色 (選択時)", type: "color", internalID: "ObjectAudioFilterSelect", internalGroup: "Color" },
-  { label: "オブジェクト枠の色 (ホバー時)", type: "color", internalID: "ObjectHover", internalGroup: "Color" },
-  { label: "オブジェクト枠の色 (フォーカス時)", type: "color", internalID: "ObjectFocus", internalGroup: "Color" },
-  { label: "オブジェクト中間点の色", type: "color", internalID: "ObjectSection", internalGroup: "Color" },
-  { label: "オブジェクト音声波形の色", type: "color", internalID: "ObjectWaveform", internalGroup: "Color" },
-  { label: "クリッピングオブジェクトの色 (下部)", type: "color", internalID: "ClippingObject", internalGroup: "Color" },
-  { label: "クリッピングオブジェクトマスクの色", type: "color", internalID: "ClippingObjectMask", internalGroup: "Color" },
-  { label: "アンカー枠の色", type: "color", internalID: "Anchor", internalGroup: "Color" },
-  { label: "アンカー線の色", type: "color", internalID: "AnchorLine", internalGroup: "Color" },
-  { label: "アンカー枠の色 (開始)", type: "color", internalID: "AnchorIn", internalGroup: "Color" },
-  { label: "アンカー枠の色 (終了)", type: "color", internalID: "AnchorOut", internalGroup: "Color" },
-  { label: "アンカー枠の色 (ホバー時)", type: "color", internalID: "AnchorHover", internalGroup: "Color" },
-  { label: "アンカー枠の色 (選択時)", type: "color", internalID: "AnchorSelect", internalGroup: "Color" },
-  { label: "アンカー枠縁の色", type: "color", internalID: "AnchorEdge", internalGroup: "Color" },
-  { label: "中心点の色 (グループ)", type: "color", internalID: "CenterGroup", internalGroup: "Color" },
-  { label: "ハンドル X", type: "color", internalID: "HandleX", internalGroup: "Color" },
-  { label: "ハンドル Y", type: "color", internalID: "HandleY", internalGroup: "Color" },
-  { label: "ハンドル Z", type: "color", internalID: "HandleZ", internalGroup: "Color" },
-  { label: "ハンドル X (ホバー時)", type: "color", internalID: "HandleXHover", internalGroup: "Color" },
-  { label: "ハンドル Y (ホバー時)", type: "color", internalID: "HandleYHover", internalGroup: "Color" },
-  { label: "ハンドル Z (ホバー時)", type: "color", internalID: "HandleZHover", internalGroup: "Color" },
-  { label: "表示領域外の色", type: "color", internalID: "OutsideDisplay", internalGroup: "Color" },
+  { labelKey: "backgroundColor" as TranslationKey, type: "color", internalID: "Background", internalGroup: "Color" },
+  { labelKey: "windowBorderColor" as TranslationKey, type: "color", internalID: "WindowBorder", internalGroup: "Color" },
+  { labelKey: "windowSeparatorColor" as TranslationKey, type: "color", internalID: "WindowSeparator", internalGroup: "Color" },
+  { labelKey: "footerBackgroundColor" as TranslationKey, type: "color", internalID: "Footer", internalGroup: "Color" },
+  { labelKey: "footerProgressColor" as TranslationKey, type: "color", internalID: "FooterProgress", internalGroup: "Color" },
+  { labelKey: "groupingColor" as TranslationKey, type: "color", internalID: "Grouping", internalGroup: "Color" },
+  { labelKey: "groupingHoverColor" as TranslationKey, type: "color", internalID: "GroupingHover", internalGroup: "Color" },
+  { labelKey: "groupingSelectColor" as TranslationKey, type: "color", internalID: "GroupingSelect", internalGroup: "Color" },
+  { labelKey: "titleHeaderColor" as TranslationKey, type: "color", internalID: "TitleHeader", internalGroup: "Color" },
+  { labelKey: "borderSelectColor" as TranslationKey, type: "color", internalID: "BorderSelect", internalGroup: "Color" },
+  { labelKey: "borderColor" as TranslationKey, type: "color", internalID: "Border", internalGroup: "Color" },
+  { labelKey: "borderFocusColor" as TranslationKey, type: "color", internalID: "BorderFocus", internalGroup: "Color" },
+  { labelKey: "textColor" as TranslationKey, type: "color", internalID: "Text", internalGroup: "Color" },
+  { labelKey: "textDisableColor" as TranslationKey, type: "color", internalID: "TextDisable", internalGroup: "Color" },
+  { labelKey: "textSelectColor" as TranslationKey, type: "color", internalID: "TextSelect", internalGroup: "Color" },
+  { labelKey: "buttonBodyColor" as TranslationKey, type: "color", internalID: "ButtonBody", internalGroup: "Color" },
+  { labelKey: "buttonBodyHoverColor" as TranslationKey, type: "color", internalID: "ButtonBodyHover", internalGroup: "Color" },
+  { labelKey: "buttonBodyPressColor" as TranslationKey, type: "color", internalID: "ButtonBodyPress", internalGroup: "Color" },
+  { labelKey: "buttonBodyDisableColor" as TranslationKey, type: "color", internalID: "ButtonBodyDisable", internalGroup: "Color" },
+  { labelKey: "buttonBodySelectColor" as TranslationKey, type: "color", internalID: "ButtonBodySelect", internalGroup: "Color" },
+  { labelKey: "sliderColor" as TranslationKey, type: "color", internalID: "SliderCursor", internalGroup: "Color" },
+  { labelKey: "trackBarRangeColor" as TranslationKey, type: "color", internalID: "TrackBarRange", internalGroup: "Color" },
+  { labelKey: "zoomGaugeColor" as TranslationKey, type: "color", internalID: "ZoomGauge", internalGroup: "Color" },
+  { labelKey: "zoomGaugeHoverColor" as TranslationKey, type: "color", internalID: "ZoomGaugeHover", internalGroup: "Color" },
+  { labelKey: "zoomGaugeOffColor" as TranslationKey, type: "color", internalID: "ZoomGaugeOff", internalGroup: "Color" },
+  { labelKey: "zoomGaugeOffHoverColor" as TranslationKey, type: "color", internalID: "ZoomGaugeOffHover", internalGroup: "Color" },
+  { labelKey: "frameRangeSelectColor" as TranslationKey, type: "color", internalID: "FrameRangeSelect", internalGroup: "Color" },
+  { labelKey: "frameRangeOutsideColor" as TranslationKey, type: "color", internalID: "FrameRangeOutside", internalGroup: "Color" },
+  { labelKey: "frameCursorColor" as TranslationKey, type: "color", internalID: "FrameCursor", internalGroup: "Color" },
+  { labelKey: "frameCursorWideColor" as TranslationKey, type: "color", internalID: "FrameCursorWide", internalGroup: "Color" },
+  { labelKey: "playerCursorColor" as TranslationKey, type: "color", internalID: "PlayerCursor", internalGroup: "Color" },
+  { labelKey: "guideLineColor" as TranslationKey, type: "color", internalID: "GuideLine", internalGroup: "Color" },
+  { labelKey: "layerBackgroundColor" as TranslationKey, type: "color", internalID: "Layer", internalGroup: "Color" },
+  { labelKey: "layerHeaderBackgroundColor" as TranslationKey, type: "color", internalID: "LayerHeader", internalGroup: "Color" },
+  { labelKey: "layerHoverColor" as TranslationKey, type: "color", internalID: "LayerHover", internalGroup: "Color" },
+  { labelKey: "layerDisableColor" as TranslationKey, type: "color", internalID: "LayerDisable", internalGroup: "Color" },
+  { labelKey: "layerRangeBackgroundColor" as TranslationKey, type: "color", internalID: "LayerRange", internalGroup: "Color" },
+  { labelKey: "layerRangeFrameColor" as TranslationKey, type: "color", internalID: "LayerRangeFrame", internalGroup: "Color" },
+  { labelKey: "objectVideoColor" as TranslationKey, type: "color", internalID: "ObjectVideo", internalGroup: "Color" },
+  { labelKey: "objectVideoSelectColor" as TranslationKey, type: "color", internalID: "ObjectVideoSelect", internalGroup: "Color" },
+  { labelKey: "objectAudioColor" as TranslationKey, type: "color", internalID: "ObjectAudio", internalGroup: "Color" },
+  { labelKey: "objectAudioSelectColor" as TranslationKey, type: "color", internalID: "ObjectAudioSelect", internalGroup: "Color" },
+  { labelKey: "objectControlColor" as TranslationKey, type: "color", internalID: "ObjectControl", internalGroup: "Color" },
+  { labelKey: "objectControlSelectColor" as TranslationKey, type: "color", internalID: "ObjectControlSelect", internalGroup: "Color" },
+  { labelKey: "objectVideoFilterColor" as TranslationKey, type: "color", internalID: "ObjectVideoFilter", internalGroup: "Color" },
+  { labelKey: "objectVideoFilterSelectColor" as TranslationKey, type: "color", internalID: "ObjectVideoFilterSelect", internalGroup: "Color" },
+  { labelKey: "objectAudioFilterColor" as TranslationKey, type: "color", internalID: "ObjectAudioFilter", internalGroup: "Color" },
+  { labelKey: "objectAudioFilterSelectColor" as TranslationKey, type: "color", internalID: "ObjectAudioFilterSelect", internalGroup: "Color" },
+  { labelKey: "objectHoverColor" as TranslationKey, type: "color", internalID: "ObjectHover", internalGroup: "Color" },
+  { labelKey: "objectFocusColor" as TranslationKey, type: "color", internalID: "ObjectFocus", internalGroup: "Color" },
+  { labelKey: "objectSectionColor" as TranslationKey, type: "color", internalID: "ObjectSection", internalGroup: "Color" },
+  { labelKey: "objectWaveformColor" as TranslationKey, type: "color", internalID: "ObjectWaveform", internalGroup: "Color" },
+  { labelKey: "clippingObjectColor" as TranslationKey, type: "color", internalID: "ClippingObject", internalGroup: "Color" },
+  { labelKey: "clippingObjectMaskColor" as TranslationKey, type: "color", internalID: "ClippingObjectMask", internalGroup: "Color" },
+  { labelKey: "anchorColor" as TranslationKey, type: "color", internalID: "Anchor", internalGroup: "Color" },
+  { labelKey: "anchorLineColor" as TranslationKey, type: "color", internalID: "AnchorLine", internalGroup: "Color" },
+  { labelKey: "anchorInColor" as TranslationKey, type: "color", internalID: "AnchorIn", internalGroup: "Color" },
+  { labelKey: "anchorOutColor" as TranslationKey, type: "color", internalID: "AnchorOut", internalGroup: "Color" },
+  { labelKey: "anchorHoverColor" as TranslationKey, type: "color", internalID: "AnchorHover", internalGroup: "Color" },
+  { labelKey: "anchorSelectColor" as TranslationKey, type: "color", internalID: "AnchorSelect", internalGroup: "Color" },
+  { labelKey: "anchorEdgeColor" as TranslationKey, type: "color", internalID: "AnchorEdge", internalGroup: "Color" },
+  { labelKey: "centerGroupColor" as TranslationKey, type: "color", internalID: "CenterGroup", internalGroup: "Color" },
+  { labelKey: "handleXColor" as TranslationKey, type: "color", internalID: "HandleX", internalGroup: "Color" },
+  { labelKey: "handleYColor" as TranslationKey, type: "color", internalID: "HandleY", internalGroup: "Color" },
+  { labelKey: "handleZColor" as TranslationKey, type: "color", internalID: "HandleZ", internalGroup: "Color" },
+  { labelKey: "handleXHoverColor" as TranslationKey, type: "color", internalID: "HandleXHover", internalGroup: "Color" },
+  { labelKey: "handleYHoverColor" as TranslationKey, type: "color", internalID: "HandleYHover", internalGroup: "Color" },
+  { labelKey: "handleZHoverColor" as TranslationKey, type: "color", internalID: "HandleZHover", internalGroup: "Color" },
+  { labelKey: "outsideDisplayColor" as TranslationKey, type: "color", internalID: "OutsideDisplay", internalGroup: "Color" },
 ];
 
 const layoutItemsDef = [
-  { label: "ウィンドウ間のサイズ", type: "number", internalID: "WindowSeparatorSize", internalGroup: "Layout" },
-  { label: "スクロールバーのサイズ", type: "number", internalID: "ScrollBarSize", internalGroup: "Layout" },
-  { label: "フッターの高さ", type: "number", internalID: "FooterHeight", internalGroup: "Layout" },
-  { label: "タイトルヘッダーのサイズ", type: "number", internalID: "TitleHeaderHeight", internalGroup: "Layout" },
-  { label: "タイムゲージの高さ", type: "number", internalID: "TimeGaugeHeight", internalGroup: "Layout" },
-  { label: "レイヤーの高さ", type: "number", internalID: "LayerHeight", internalGroup: "Layout" },
-  { label: "レイヤー名の幅", type: "number", internalID: "LayerHeaderWidth", internalGroup: "Layout" },
-  { label: "設定項目ヘッダーの幅", type: "number", internalID: "SettingItemHeaderWidth", internalGroup: "Layout" },
-  { label: "設定項目高さ", type: "number", internalID: "SettingItemHeight", internalGroup: "Layout" },
-  { label: "設定項目マージンの幅", type: "number", internalID: "SettingItemMarginWidth", internalGroup: "Layout" },
-  { label: "設定ヘッダーの高さ", type: "number", internalID: "SettingHeaderHeight", internalGroup: "Layout" },
-  { label: "プレイヤーコントローラーの高さ", type: "number", internalID: "PlayerControlHeight", internalGroup: "Layout" },
-  { label: "メディアエクスプローラーヘッダーの高さ", type: "number", internalID: "ExplorerHeaderHeight", internalGroup: "Layout" },
-  { label: "メディアエクスプローラーの数", type: "number", internalID: "ExplorerWindowNum", internalGroup: "Layout" },
-  { label: "リスト選択項目の高さ", type: "number", internalID: "ListItemHeight", internalGroup: "Layout" },
+  { labelKey: "windowSeparatorSize" as TranslationKey, type: "number", internalID: "WindowSeparatorSize", internalGroup: "Layout" },
+  { labelKey: "scrollBarSize" as TranslationKey, type: "number", internalID: "ScrollBarSize", internalGroup: "Layout" },
+  { labelKey: "footerHeight" as TranslationKey, type: "number", internalID: "FooterHeight", internalGroup: "Layout" },
+  { labelKey: "titleHeaderHeight" as TranslationKey, type: "number", internalID: "TitleHeaderHeight", internalGroup: "Layout" },
+  { labelKey: "timeGaugeHeight" as TranslationKey, type: "number", internalID: "TimeGaugeHeight", internalGroup: "Layout" },
+  { labelKey: "layerHeight" as TranslationKey, type: "number", internalID: "LayerHeight", internalGroup: "Layout" },
+  { labelKey: "layerHeaderWidth" as TranslationKey, type: "number", internalID: "LayerHeaderWidth", internalGroup: "Layout" },
+  { labelKey: "settingItemHeaderWidth" as TranslationKey, type: "number", internalID: "SettingItemHeaderWidth", internalGroup: "Layout" },
+  { labelKey: "settingItemHeight" as TranslationKey, type: "number", internalID: "SettingItemHeight", internalGroup: "Layout" },
+  { labelKey: "settingItemMarginWidth" as TranslationKey, type: "number", internalID: "SettingItemMarginWidth", internalGroup: "Layout" },
+  { labelKey: "settingHeaderHeight" as TranslationKey, type: "number", internalID: "SettingHeaderHeight", internalGroup: "Layout" },
+  { labelKey: "playerControlHeight" as TranslationKey, type: "number", internalID: "PlayerControlHeight", internalGroup: "Layout" },
+  { labelKey: "explorerHeaderHeight" as TranslationKey, type: "number", internalID: "ExplorerHeaderHeight", internalGroup: "Layout" },
+  { labelKey: "explorerWindowNum" as TranslationKey, type: "number", internalID: "ExplorerWindowNum", internalGroup: "Layout" },
+  { labelKey: "listItemHeight" as TranslationKey, type: "number", internalID: "ListItemHeight", internalGroup: "Layout" },
 ];
 
 const formatItemsDef = [
-  { label: "フッター左表示形式", type: "text", internalID: "FooterLeft", internalGroup: "Format" },
-  { label: "フッター右表示形式", type: "text", internalID: "FooterRight", internalGroup: "Format" },
+  { labelKey: "footerLeftFormat" as TranslationKey, type: "text", internalID: "FooterLeft", internalGroup: "Format" },
+  { labelKey: "footerRightFormat" as TranslationKey, type: "text", internalID: "FooterRight", internalGroup: "Format" },
 ];
 
 function formatConfigForSave(confData: Record<string, Record<string, string>>): string {
@@ -140,6 +143,7 @@ function formatConfigForSave(confData: Record<string, Record<string, string>>): 
 }
 
 const App: React.FC = () => {
+  const { t } = useLanguage();
   const [confData, setConfData] = useState<Record<string, Record<string, string>>>({});
   const [fontItems, setFontItems] = useState<SettingsCardProp[]>([]);
   const [colorItems, setColorItems] = useState<SettingsCardProp[]>([]);
@@ -216,7 +220,7 @@ const App: React.FC = () => {
 
   const saveConfig = async (showAlert: boolean = true, data?: Record<string, Record<string, string>>) => {
     if (!currentFilePath) {
-      alert('ファイルが選択されていません。');
+      alert(t('noFileSelected'));
       return;
     }
     try {
@@ -229,7 +233,7 @@ const App: React.FC = () => {
 
       await invoke('write_config_file', { path: currentFilePath, content });
       if (showAlert) {
-        alert('設定を保存しました！');
+        alert(t('configSaved'));
       }
     } catch (error) {
       console.error('設定の保存に失敗しました:', error);
@@ -251,17 +255,17 @@ const App: React.FC = () => {
         
         await invoke('write_config_file', { path: filePath, content });
         setCurrentFilePath(filePath);
-        alert('設定を保存しました！');
+        alert(t('configSaved'));
       }
     } catch (error) {
       console.error('設定の保存に失敗しました:', error);
-      alert('設定の保存に失敗しました。');
+      alert(t('configSaveFailed'));
     }
   };
 
   const saveConfigToProgramData = async () => {
     if (!currentFilePath) {
-      alert('ファイルが選択されていません。');
+      alert(t('noFileSelected'));
       return;
     }
     try {
@@ -272,15 +276,15 @@ const App: React.FC = () => {
       const programDataPath = await invoke('get_program_data_path');
       const targetPath = `${programDataPath}\\aviutl2\\style.conf`;
       await invoke('write_config_file', { path: targetPath, content });
-      alert('設定を AviUtl2 の推奨ディレクトリに保存しました！');
+      alert(t('configSaved'));
     } catch(e: unknown) {
       console.error('設定の保存に失敗しました:', e);
-      alert('設定の保存に失敗しました。');
+      alert(t('configSaveFailed'));
     }
   }
   const createBackup = async () => {
     if (!currentFilePath) {
-      alert('ファイルが選択されていません。');
+      alert(t('noFileSelected'));
       return;
     }
     try {
@@ -290,15 +294,15 @@ const App: React.FC = () => {
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 ` + formatConfigForSave(confData);
       await invoke('write_config_file', { path: backupPath, content });
-      alert('バックアップを作成しました！');
+      alert(t('backupCreated'));
     } catch (error) {
       console.error('バックアップの作成に失敗しました:', error);
-      alert('バックアップの作成に失敗しました。');
+      alert(t('backupCreateFailed'));
     }
   }
   const restoreBackup = async () => {
     if (!currentFilePath) {
-      alert('ファイルが選択されていません。');
+      alert(t('noFileSelected'));
       return;
     }
     try {
@@ -313,10 +317,10 @@ const App: React.FC = () => {
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       await invoke('write_config_file', { path: currentFilePath, content });
       setCurrentFilePath(currentFilePath);
-      alert('バックアップから復元しました！');
+      alert(t('backupRestored'));
     } catch (error) {
       console.error('バックアップからの復元に失敗しました:', error);
-      alert('バックアップからの復元に失敗しました。');
+      alert(t('backupRestoreFailed'));
     }
   }
 
@@ -346,16 +350,16 @@ const App: React.FC = () => {
       setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
       setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      alert('既定の設定を上書きしました！');
+      alert(t('defaultConfigOverwritten'));
     } catch(e: unknown) {
       console.error('既定の設定の取得に失敗しました:', e);
-      alert('既定の設定の取得に失敗しました。');
+      alert(t('defaultConfigFailed'));
     }
   }
 
   const resetSelectedItems = async () => {
     if (!defaultConfig.Font) {
-      alert('既定の設定が読み込まれていません。');
+      alert(t('defaultConfigNotLoaded'));
       return;
     }
 
@@ -389,7 +393,7 @@ const App: React.FC = () => {
     setConfData(newConfData);
 
     await saveConfig(false, newConfData);
-    alert('既定の設定を上書きしました！');
+    alert(t('defaultConfigOverwritten'));
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -402,7 +406,18 @@ const App: React.FC = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>AviUtl2 Style.conf Editor</h1>
+      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>{t('title')}</h1>
+      
+      {/* 言語切り替え */}
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        mb: 2, 
+        gap: 2,
+        alignItems: 'center'
+      }}>
+        <LanguageSwitcher />
+      </Box>
       
       {/* メインボタングループ */}
       <Box sx={{ 
@@ -414,36 +429,36 @@ const App: React.FC = () => {
         alignItems: 'center'
       }}>
         <ButtonGroup variant="contained" size="large">
-          <Tooltip title="現在の設定をファイルに保存します。">
+          <Tooltip title={t('saveConfigTooltip')}>
             <Button
               color="primary"
               onClick={() => saveConfig()}
             >
-              設定を保存
+              {t('saveConfig')}
             </Button>
           </Tooltip>
-          <Tooltip title="新しいファイル名で設定を保存します。">
+          <Tooltip title={t('saveAsTooltip')}>
             <Button
               color="primary"
               onClick={saveAsConfig}
             >
-              名前を付けて保存
+              {t('saveAs')}
             </Button>
           </Tooltip>
-          <Tooltip title="現在の設定を AviUtl2 で推奨されているディレクトリに保存します。">
+          <Tooltip title={t('saveToProgramDataTooltip')}>
             <Button
               color="primary"
               onClick={saveConfigToProgramData}
             >
-              AviUtl2 のディレクトリに保存 (推奨)
+              {t('saveToProgramData')}
             </Button>
           </Tooltip>
-          <Tooltip title="現在の設定のバックアップを作成します (推奨)">
+          <Tooltip title={t('createBackupTooltip')}>
             <Button
               color="primary"
               onClick={createBackup}
             >
-              バックアップを作成 (推奨)
+              {t('createBackup')}
             </Button>
           </Tooltip>
         </ButtonGroup>
@@ -454,13 +469,13 @@ const App: React.FC = () => {
             onClick={selectFileAndLoad}
             id="select-file-button"
           >
-            ファイルを開く
+            {t('openFile')}
           </Button>
           <Button
             color="primary"
             onClick={handleMenuOpen}
           >
-            その他の操作
+            {t('otherOperations')}
           </Button>
         </ButtonGroup>
       </Box>
@@ -482,7 +497,7 @@ const App: React.FC = () => {
             fontSize: '0.9rem',
           }}
         >
-          現在のファイル: {currentFilePath}
+          {t('currentFile')} {currentFilePath}
         </Box>
       )}
 
@@ -501,13 +516,13 @@ const App: React.FC = () => {
         }}
       >
         <MenuItem onClick={() => { overwriteDefaultConfig(); handleMenuClose(); }}>
-          すべて既定の設定で上書き
+          {t('overwriteDefaultConfig')}
         </MenuItem>
         <MenuItem onClick={() => { resetSelectedItems(); handleMenuClose(); }}>
-          選択した項目を既定に復元
+          {t('resetSelectedItems')}
         </MenuItem>
         <MenuItem onClick={() => { restoreBackup(); handleMenuClose(); }}>
-          バックアップから復元
+          {t('restoreBackup')}
         </MenuItem>
       </Menu>
       <div
@@ -524,29 +539,33 @@ const App: React.FC = () => {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           <SettingsCard 
-            title="フォントの設定" 
+            title={t('fontSettings')} 
             items={fontItems} 
             onItemChange={handleItemChange} 
             onItemSelect={handleItemSelect}
+            getLabel={t}
           />
           <SettingsCard 
-            title="レイアウトの設定" 
+            title={t('layoutSettings')} 
             items={layoutItems} 
             onItemChange={handleItemChange} 
             onItemSelect={handleItemSelect}
+            getLabel={t}
           />
           <SettingsCard 
-            title="形式の設定" 
+            title={t('formatSettings')} 
             items={formatItems} 
             onItemChange={handleItemChange} 
             onItemSelect={handleItemSelect}
+            getLabel={t}
           />
         </div>
         <SettingsCard 
-          title="色の設定" 
+          title={t('colorSettings')} 
           items={colorItems} 
           onItemChange={handleItemChange} 
           onItemSelect={handleItemSelect}
+          getLabel={t}
         />
       </div>
     </Box>
