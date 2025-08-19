@@ -4,8 +4,10 @@
     x:Class="SettingsCard">
     <Border BorderBrush="Gray" BorderThickness="1" Padding="12" Margin="8">
         <StackPanel>
-            <TextBlock Text="設定" FontWeight="Bold" FontSize="16" />
-            <!-- 設定項目をここに追加 -->
+            <TextBlock x:Name="TitleText" FontWeight="Bold" FontSize="16" Margin="0,0,0,8" />
+            <ItemsControl x:Name="SettingsList">
+                <!-- 各設定項目はDataTemplateでバインド -->
+            </ItemsControl>
         </StackPanel>
     </Border>
 </UserControl>

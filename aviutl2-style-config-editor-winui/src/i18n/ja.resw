@@ -6,4 +6,22 @@
   <data name="Language" xml:space="preserve">
     <value>言語</value>
   </data>
+  <data name="Japanese" xml:space="preserve">
+    <value>日本語</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="FontSettings" xml:space="preserve">
+    <value>フォントの設定</value>
+  </data>
+  <data name="ColorSettings" xml:space="preserve">
+    <value>色の設定</value>
+  </data>
+  <data name="LayoutSettings" xml:space="preserve">
+    <value>レイアウトの設定</value>
+  </data>
+  <data name="FormatSettings" xml:space="preserve">
+    <value>形式の設定</value>
+  </data>
 </root>

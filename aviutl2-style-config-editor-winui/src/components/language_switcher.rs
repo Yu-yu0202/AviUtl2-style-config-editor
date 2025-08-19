@@ -8,5 +8,9 @@ impl LanguageSwitcher {
     }
     pub fn set_language(&mut self, lang: &str) {
         self.current_lang = lang.to_string();
+        // TODO: UI更新やリソース再読込処理
+    }
+    pub fn get_language(&self) -> &str {
+        &self.current_lang
     }
 }
