@@ -4,9 +4,11 @@ import CardHeader from '@mui/material/CardHeader';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
+import type { TranslationKey } from '../i18n/translations';
 
 export type SettingsCardProp = {
-  label: string;
+  label?: string;
+  labelKey?: string;
   internalGroup: string;
   internalID: string;
   type: 'text' | 'number' | 'color' | 'info';
@@ -20,9 +22,10 @@ export type SettingsCardProps = {
   items: SettingsCardProp[];
   onItemChange: (group: string, id: string, value: string) => void;
   onItemSelect: (group: string, id: string, selected: boolean) => void;
+  getLabel?: (key: TranslationKey) => string;
 };
 
-export function SettingsCard({ title, items, onItemChange, onItemSelect }: SettingsCardProps) {
+export function SettingsCard({ title, items, onItemChange, onItemSelect, getLabel }: SettingsCardProps) {
   return (
     <Card
       variant="outlined"
@@ -54,7 +57,9 @@ export function SettingsCard({ title, items, onItemChange, onItemSelect }: Setti
                   onChange={(e) => onItemSelect(item.internalGroup, item.internalID, e.target.checked)}
                   size="small"
                 />
-                <span style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>{item.label}</span>
+                <span style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>
+                  {getLabel && item.labelKey ? getLabel(item.labelKey as TranslationKey) : item.label}
+                </span>
               </Box>
               {item.type === 'color' ? (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
