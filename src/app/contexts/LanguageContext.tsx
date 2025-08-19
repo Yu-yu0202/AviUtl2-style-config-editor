@@ -44,7 +44,40 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('language', lang);
+const [language, setLanguageState] = useState<Language>('ja');
+
+  useEffect(() => {
+    try {
+      // ローカルストレージから言語設定を読み込み
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && (savedLanguage === 'ja' || savedLanguage === 'en')) {
+        setLanguageState(savedLanguage);
+      } else {
+        // ブラウザの言語設定を確認
+        const browserLang = navigator.language.toLowerCase();
+        if (browserLang.startsWith('en')) {
+          setLanguageState('en');
+        } else {
+          setLanguageState('ja');
+        }
+      }
+    } catch (error) {
+      console.error('Error accessing localStorage:', error);
+      // Fallback to default language
+      setLanguageState('ja');
+    }
+  }, []);
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    try {
+      localStorage.setItem('language', lang);
+    } catch (error) {
+      console.error('Error setting language in localStorage:', error);
+    }
+  };
+
+  const t = (key: keyof typeof translations.ja): string => {
   };
 
   const t = (key: keyof typeof translations.ja): string => {
