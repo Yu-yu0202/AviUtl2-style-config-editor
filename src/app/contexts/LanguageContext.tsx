@@ -27,26 +27,6 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const [language, setLanguageState] = useState<Language>('ja');
 
   useEffect(() => {
-    // ローカルストレージから言語設定を読み込み
-    const savedLanguage = localStorage.getItem('language') as Language;
-    if (savedLanguage && (savedLanguage === 'ja' || savedLanguage === 'en')) {
-      setLanguageState(savedLanguage);
-    } else {
-      // ブラウザの言語設定を確認
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith('en')) {
-        setLanguageState('en');
-      } else {
-        setLanguageState('ja');
-      }
-    }
-  }, []);
-
-  const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-const [language, setLanguageState] = useState<Language>('ja');
-
-  useEffect(() => {
     try {
       // ローカルストレージから言語設定を読み込み
       const savedLanguage = localStorage.getItem('language') as Language;
@@ -77,20 +57,10 @@ const [language, setLanguageState] = useState<Language>('ja');
     }
   };
 
-  const t = (key: keyof typeof translations.ja): string => {
-  };
-
-  const t = (key: keyof typeof translations.ja): string => {
-localStorage.setItem('language', lang);
-  };
-
   const defaultLanguage: Language = 'ja';
 
   const t = (key: keyof typeof translations.ja): string => {
     return translations[language][key] || translations[defaultLanguage][key] || key;
-  };
-
-  const value: LanguageContextType = {
   };
 
   const value: LanguageContextType = {

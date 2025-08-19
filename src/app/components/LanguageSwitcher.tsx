@@ -20,28 +20,7 @@ export const LanguageSwitcher: React.FC = () => {
       </Tooltip>
       <Tooltip title={t('english')}>
         <Button
-export const LanguageSwitcher: React.FC = () => {
-  const { language, setLanguage, t } = useLanguage();
-
-  return (
-    <ButtonGroup size="small">
-      <Tooltip title={t('japanese')}>
-        <Button
-          color={language === 'ja' ? 'primary' : 'inherit'}
-          onClick={() => setLanguage('ja')}
-          sx={{ minWidth: '60px' }}
-        >
-          日本語
-        </Button>
-      </Tooltip>
-      <Tooltip title={t('english')}>
-        <Button
-          color={language === 'en' ? 'primary' : 'inherit'}
-          onClick={() => setLanguage('en')}
-          sx={{ minWidth: '60px' }}
-        >
-          English
-        </Button>
+          variant={language === 'en' ? 'contained' : 'outlined'}
           onClick={() => setLanguage('en')}
           sx={{ minWidth: '60px' }}
         >
