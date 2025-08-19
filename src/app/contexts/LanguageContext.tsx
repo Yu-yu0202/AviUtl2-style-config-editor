@@ -81,7 +81,16 @@ const [language, setLanguageState] = useState<Language>('ja');
   };
 
   const t = (key: keyof typeof translations.ja): string => {
-    return translations[language][key] || translations.ja[key] || key;
+localStorage.setItem('language', lang);
+  };
+
+  const defaultLanguage: Language = 'ja';
+
+  const t = (key: keyof typeof translations.ja): string => {
+    return translations[language][key] || translations[defaultLanguage][key] || key;
+  };
+
+  const value: LanguageContextType = {
   };
 
   const value: LanguageContextType = {
