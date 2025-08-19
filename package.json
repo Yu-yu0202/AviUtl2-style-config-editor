@@ -2,7 +2,7 @@
   "name": "aviutl2-style-config-editor",
   "version": "0.2.1",
   "type": "module",
-  "description": "AviUtl2 Style Config Editor",
+  "description": "AviUtl2 style.conf Editor",
   "author": "Yu-yu0202",
   "scripts": {
     "dev": "next dev --turbopack",
