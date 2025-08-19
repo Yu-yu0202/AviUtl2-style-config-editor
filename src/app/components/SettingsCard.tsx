@@ -8,7 +8,7 @@ import type { TranslationKey } from '../i18n/translations';
 
 export type SettingsCardProp = {
   label?: string;
-  labelKey?: string;
+  labelKey?: TranslationKey;
   internalGroup: string;
   internalID: string;
   type: 'text' | 'number' | 'color' | 'info';
