@@ -6,7 +6,7 @@
     Title="AviUtl2 Style Config Editor"
     Height="400" Width="600">
     <StackPanel>
-        <local:LanguageSwitcher />
-        <local:SettingsCard />
+        <local:LanguageSwitcher x:Name="LangSwitcher" />
+        <local:SettingsCard x:Name="SettingsCard" />
     </StackPanel>
 </Window>

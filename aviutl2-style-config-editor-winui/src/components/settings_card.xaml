@@ -6,7 +6,16 @@
         <StackPanel>
             <TextBlock x:Name="TitleText" FontWeight="Bold" FontSize="16" Margin="0,0,0,8" />
             <ItemsControl x:Name="SettingsList">
-                <!-- 各設定項目はDataTemplateでバインド -->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,4">
+                            <CheckBox IsChecked="{Binding is_selected}" Margin="0,0,8,0" />
+                            <TextBlock Text="{Binding label}" Width="120" Margin="0,0,8,0" />
+                            <TextBox Text="{Binding value}" Width="120" Visibility="{Binding setting_type, Converter={StaticResource TextTypeVisibilityConverter}}" />
+                            <!-- ColorPickerや他の型もここで分岐可能 -->
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
     </Border>
