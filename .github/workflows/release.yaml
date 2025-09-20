@@ -31,23 +31,10 @@ jobs:
         with:
           version: 10.12.1
 
-      - name: Cache cargo registry
-        uses: actions/cache@v4
+      - name: Cache Rust
+        uses: Swatinem/rust-cache@v2
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
-
-      - name: Cache Rust target
-        uses: actions/cache@v4
-        with:
-          path: src-tauri/target
-          key: ${{ runner.os }}-rust-target-${{ hashFiles('src-tauri/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-rust-target-
+          workspaces: 'src-tauri -> target'
 
       - name: Cache node_modules and pnpm store
         uses: actions/cache@v4
