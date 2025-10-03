@@ -27,7 +27,10 @@ export default function RootLayout({
     <html lang="ja">
       <body
         className={`${geistSans.variable} ${geistMono.variable}`}
+<<<<<<< Current (Your changes)
         style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}
+=======
+>>>>>>> Incoming (Background Agent changes)
       >
         <LanguageProvider>
           {children}
