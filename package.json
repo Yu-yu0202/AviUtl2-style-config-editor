@@ -37,7 +37,6 @@
     "@commitlint/config-conventional": "^19.8.1",
     "@eslint/eslintrc": "^3",
     "@mui/material": "^7.2.0",
-    "@tailwindcss/postcss": "^4",
     "@tauri-apps/cli": "^2.6.0",
     "@types/node": "^20.19.17",
     "@types/react": "^19",
@@ -49,7 +48,6 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
     "prettier": "^3.6.2",
-    "tailwindcss": "^4",
     "typescript": "^5.9.2"
   }
 }
