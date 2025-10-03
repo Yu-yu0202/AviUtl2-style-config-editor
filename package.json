@@ -11,7 +11,7 @@
     "lint": "next lint",
     "tauri": "tauri",
     "tauri:dev": "tauri dev",
-    "tauri:build": "tauri build",
+    "tauri:build": "cd src-tauri && cargo build --release --target x86_64-pc-windows-gnu",
     "commit": "cz",
     "prepare": "husky",
     "lint-staged": "lint-staged",
