@@ -2,21 +2,38 @@
 
 import React, { useState } from "react";
 import { SettingsCard, SettingsCardProp } from "./components/SettingsCard";
-import { 
-  Button, 
-  Box, 
-  Menu, 
-  MenuItem, 
-  ButtonGroup, 
-  Tooltip
-} from "@mui/material";
+import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { open, save } from '@tauri-apps/plugin-dialog';
 import { invoke } from '@tauri-apps/api/core';
+import {
+  Save,
+  FolderOpen,
+  MoreHorizontal,
+  FileText,
+  Download,
+  Upload,
+  RotateCcw,
+  Archive,
+  RefreshCw,
+} from 'lucide-react';
 import pkg from '../../package.json' assert { type: 'json' };
 const version = pkg.version;
 import './globals.css';
 import { useLanguage } from './contexts/LanguageContext';
 import { LanguageSwitcher } from './components/LanguageSwitcher';
+import { ThemeSwitcher } from './components/ThemeSwitcher';
 import { ItemsDef } from './constants/ItemsDef';
 
 const fontItemsDef = ItemsDef.fontItemsDef;
@@ -24,8 +41,10 @@ const colorItemsDef = ItemsDef.colorItemsDef;
 const layoutItemsDef = ItemsDef.layoutItemsDef;
 const formatItemsDef = ItemsDef.formatItemsDef;
 
-function formatConfigForSave(confData: Record<string, Record<string, string>>): string {
-  const order = ["Font", "Color", "Layout", "Format"];
+function formatConfigForSave(
+  confData: Record<string, Record<string, string>>
+): string {
+  const order = ['Font', 'Color', 'Layout', 'Format'];
   return order
     .map(group => {
       const groupData = confData[group];
@@ -42,31 +61,64 @@ function formatConfigForSave(confData: Record<string, Record<string, string>>): 
 
 const App: React.FC = () => {
   const { t } = useLanguage();
-  const [confData, setConfData] = useState<Record<string, Record<string, string>>>({});
+  const [confData, setConfData] = useState<
+    Record<string, Record<string, string>>
+  >({});
   const [fontItems, setFontItems] = useState<SettingsCardProp[]>([]);
   const [colorItems, setColorItems] = useState<SettingsCardProp[]>([]);
   const [layoutItems, setLayoutItems] = useState<SettingsCardProp[]>([]);
   const [formatItems, setFormatItems] = useState<SettingsCardProp[]>([]);
-  const [currentFilePath, setCurrentFilePath] = useState<string>("");
-  const [defaultConfig, setDefaultConfig] = useState<Record<string, Record<string, string>>>({});
-  const [menuAnchorEl, setMenuAnchorEl] = useState<null | HTMLElement>(null);
+  const [currentFilePath, setCurrentFilePath] = useState<string>('');
+  const [defaultConfig, setDefaultConfig] = useState<
+    Record<string, Record<string, string>>
+  >({});
 
   const loadConfig = async (filePath?: string) => {
     if (!filePath) return;
     try {
-      const content = await invoke<string>('read_config_file', { path: filePath });
+      const content = await invoke<string>('read_config_file', {
+        path: filePath,
+      });
       const confJson = await invoke('parse_config', { content });
       setConfData(confJson as Record<string, Record<string, string>>);
       const data = confJson as Record<string, Record<string, string>>;
-      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFontItems(
+        fontItemsDef.map(def => ({
+          ...def,
+          value: data.Font?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setColorItems(
+        colorItemsDef.map(def => ({
+          ...def,
+          value: data.Color?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setLayoutItems(
+        layoutItemsDef.map(def => ({
+          ...def,
+          value: data.Layout?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setFormatItems(
+        formatItemsDef.map(def => ({
+          ...def,
+          value: data.Format?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
 
       if (!defaultConfig.Font) {
         const defaultConfigStr = await invoke<string>('get_default_config');
-        const defaultConfJson = await invoke('parse_config', { content: defaultConfigStr });
-        setDefaultConfig(defaultConfJson as Record<string, Record<string, string>>);
+        const defaultConfJson = await invoke('parse_config', {
+          content: defaultConfigStr,
+        });
+        setDefaultConfig(
+          defaultConfJson as Record<string, Record<string, string>>
+        );
       }
     } catch (error) {
       console.error('設定の読み込みに失敗しました:', error);
@@ -78,19 +130,21 @@ const App: React.FC = () => {
       ...prev,
       [group]: {
         ...prev[group],
-        [id]: value
-      }
+        [id]: value,
+      },
     }));
 
     const updateItems = (
       _items: SettingsCardProp[],
       setItems: React.Dispatch<React.SetStateAction<SettingsCardProp[]>>
     ) => {
-      setItems(prev => prev.map(item => 
-        item.internalGroup === group && item.internalID === id 
-          ? { ...item, value } 
-          : item
-      ));
+      setItems(prev =>
+        prev.map(item =>
+          item.internalGroup === group && item.internalID === id
+            ? { ...item, value }
+            : item
+        )
+      );
     };
 
     if (group === 'Font') updateItems(fontItems, setFontItems);
@@ -103,11 +157,13 @@ const App: React.FC = () => {
     const updateItems = (
       setItems: React.Dispatch<React.SetStateAction<SettingsCardProp[]>>
     ) => {
-      setItems(prev => prev.map(item => 
-        item.internalGroup === group && item.internalID === id 
-          ? { ...item, isSelected: selected } 
-          : item
-      ));
+      setItems(prev =>
+        prev.map(item =>
+          item.internalGroup === group && item.internalID === id
+            ? { ...item, isSelected: selected }
+            : item
+        )
+      );
     };
 
     if (group === 'Font') updateItems(setFontItems);
@@ -116,14 +172,18 @@ const App: React.FC = () => {
     else if (group === 'Format') updateItems(setFormatItems);
   };
 
-  const saveConfig = async (showAlert: boolean = true, data?: Record<string, Record<string, string>>) => {
+  const saveConfig = async (
+    showAlert: boolean = true,
+    data?: Record<string, Record<string, string>>
+  ) => {
     if (!currentFilePath) {
       alert(t('noFileSelected'));
       return;
     }
     try {
       const configData = data || confData;
-      const content = `; style.conf 
+      const content =
+        `; style.conf 
 ; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 
@@ -142,15 +202,16 @@ const App: React.FC = () => {
   const saveAsConfig = async () => {
     try {
       const filePath = await save({
-        filters: [{ name: 'Config', extensions: ['conf'] }]
+        filters: [{ name: 'Config', extensions: ['conf'] }],
       });
       if (filePath) {
-        const content = `; style.conf 
+        const content =
+          `; style.conf 
 ; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 
 ` + formatConfigForSave(confData);
-        
+
         await invoke('write_config_file', { path: filePath, content });
         setCurrentFilePath(filePath);
         alert(t('configSaved'));
@@ -167,7 +228,8 @@ const App: React.FC = () => {
       return;
     }
     try {
-      const content = `; style.conf
+      const content =
+        `; style.conf
 ; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 ` + formatConfigForSave(confData);
@@ -175,11 +237,11 @@ const App: React.FC = () => {
       const targetPath = `${programDataPath}\\aviutl2\\style.conf`;
       await invoke('write_config_file', { path: targetPath, content });
       alert(t('configSaved'));
-    } catch(e: unknown) {
+    } catch (e: unknown) {
       console.error('設定の保存に失敗しました:', e);
       alert(t('configSaveFailed'));
     }
-  }
+  };
   const createBackup = async () => {
     if (!currentFilePath) {
       alert(t('noFileSelected'));
@@ -187,7 +249,8 @@ const App: React.FC = () => {
     }
     try {
       const backupPath = currentFilePath + '.bak';
-      const content = `; style.conf backup
+      const content =
+        `; style.conf backup
 ; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}
 ; AviUtl2 Style.conf Editor v${version} by Yu-yu0202
 ` + formatConfigForSave(confData);
@@ -197,7 +260,7 @@ const App: React.FC = () => {
       console.error('バックアップの作成に失敗しました:', error);
       alert(t('backupCreateFailed'));
     }
-  }
+  };
   const restoreBackup = async () => {
     if (!currentFilePath) {
       alert(t('noFileSelected'));
@@ -205,14 +268,40 @@ const App: React.FC = () => {
     }
     try {
       const backupPath = currentFilePath + '.bak';
-      const content = await invoke<string>('read_config_file', { path: backupPath });
+      const content = await invoke<string>('read_config_file', {
+        path: backupPath,
+      });
       const confJson = await invoke('parse_config', { content });
       setConfData(confJson as Record<string, Record<string, string>>);
       const data = confJson as Record<string, Record<string, string>>;
-      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFontItems(
+        fontItemsDef.map(def => ({
+          ...def,
+          value: data.Font?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setColorItems(
+        colorItemsDef.map(def => ({
+          ...def,
+          value: data.Color?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setLayoutItems(
+        layoutItemsDef.map(def => ({
+          ...def,
+          value: data.Layout?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setFormatItems(
+        formatItemsDef.map(def => ({
+          ...def,
+          value: data.Format?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
       await invoke('write_config_file', { path: currentFilePath, content });
       setCurrentFilePath(currentFilePath);
       alert(t('backupRestored'));
@@ -220,13 +309,13 @@ const App: React.FC = () => {
       console.error('バックアップからの復元に失敗しました:', error);
       alert(t('backupRestoreFailed'));
     }
-  }
+  };
 
   const selectFileAndLoad = async () => {
     try {
       const filePath = await open({
         multiple: false,
-        filters: [{ name: 'Config', extensions: ['conf'] }]
+        filters: [{ name: 'Config', extensions: ['conf'] }],
       });
       if (filePath) {
         setCurrentFilePath(filePath as string);
@@ -239,21 +328,52 @@ const App: React.FC = () => {
 
   const overwriteDefaultConfig = async () => {
     try {
-      const defaultConfig = `; style.conf default setting\n; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}\n; AviUtl2 Style.conf Editor v${version} by Yu-yu0202\n\n` + await invoke<string>('get_default_config');
-      const defaultConfJson = await invoke('parse_config', { content: defaultConfig });
-      await invoke('write_config_file', { path: currentFilePath, content: defaultConfig });
+      const defaultConfig =
+        `; style.conf default setting\n; Last edited by AviUtl2 Style.conf Editor at ${new Date().toISOString()}\n; AviUtl2 Style.conf Editor v${version} by Yu-yu0202\n\n` +
+        (await invoke<string>('get_default_config'));
+      const defaultConfJson = await invoke('parse_config', {
+        content: defaultConfig,
+      });
+      await invoke('write_config_file', {
+        path: currentFilePath,
+        content: defaultConfig,
+      });
       setConfData(defaultConfJson as Record<string, Record<string, string>>);
       const data = defaultConfJson as Record<string, Record<string, string>>;
-      setFontItems(fontItemsDef.map(def => ({ ...def, value: data.Font?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setColorItems(colorItemsDef.map(def => ({ ...def, value: data.Color?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setLayoutItems(layoutItemsDef.map(def => ({ ...def, value: data.Layout?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
-      setFormatItems(formatItemsDef.map(def => ({ ...def, value: data.Format?.[def.internalID] ?? "", type: def.type as "number" | "text" | "color" | "info" })));
+      setFontItems(
+        fontItemsDef.map(def => ({
+          ...def,
+          value: data.Font?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setColorItems(
+        colorItemsDef.map(def => ({
+          ...def,
+          value: data.Color?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setLayoutItems(
+        layoutItemsDef.map(def => ({
+          ...def,
+          value: data.Layout?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
+      setFormatItems(
+        formatItemsDef.map(def => ({
+          ...def,
+          value: data.Format?.[def.internalID] ?? '',
+          type: def.type as 'number' | 'text' | 'color' | 'info',
+        }))
+      );
       alert(t('defaultConfigOverwritten'));
-    } catch(e: unknown) {
+    } catch (e: unknown) {
       console.error('既定の設定の取得に失敗しました:', e);
       alert(t('defaultConfigFailed'));
     }
-  }
+  };
 
   const resetSelectedItems = async () => {
     if (!defaultConfig.Font) {
@@ -270,7 +390,7 @@ const App: React.FC = () => {
     ) => {
       const newItems = items.map(item => {
         if (item.isSelected) {
-          const defaultValue = defaultConfig[group]?.[item.internalID] ?? "";
+          const defaultValue = defaultConfig[group]?.[item.internalID] ?? '';
           if (!newConfData[group]) {
             newConfData[group] = {};
           }
@@ -287,186 +407,190 @@ const App: React.FC = () => {
     updateSelectedItems(layoutItems, setLayoutItems, 'Layout');
     updateSelectedItems(formatItems, setFormatItems, 'Format');
 
-
     setConfData(newConfData);
 
     await saveConfig(false, newConfData);
     alert(t('defaultConfigOverwritten'));
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setMenuAnchorEl(null);
-  };
-
   return (
-    <Box sx={{ p: 3 }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '24px', textAlign: 'center' }}>{t('title')}</h1>
-      
-      {/* 言語切り替え */}
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        mb: 2, 
-        gap: 2,
-        alignItems: 'center'
-      }}>
-        <LanguageSwitcher />
-      </Box>
-      
-      {/* メインボタングループ */}
-      <Box sx={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        mb: 3, 
-        gap: 2,
-        flexDirection: { xs: 'column', sm: 'row' },
-        alignItems: 'center'
-      }}>
-        <ButtonGroup variant="contained" size="large">
-          <Tooltip title={t('saveConfigTooltip')}>
-            <Button
-              color="primary"
-              onClick={() => saveConfig()}
-            >
-              {t('saveConfig')}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t('saveAsTooltip')}>
-            <Button
-              color="primary"
-              onClick={saveAsConfig}
-            >
-              {t('saveAs')}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t('saveToProgramDataTooltip')}>
-            <Button
-              color="primary"
-              onClick={saveConfigToProgramData}
-            >
-              {t('saveToProgramData')}
-            </Button>
-          </Tooltip>
-          <Tooltip title={t('createBackupTooltip')}>
-            <Button
-              color="primary"
-              onClick={createBackup}
-            >
-              {t('createBackup')}
-            </Button>
-          </Tooltip>
-        </ButtonGroup>
-        
-        <ButtonGroup variant="contained">
-          <Button
-            color="primary"
-            onClick={selectFileAndLoad}
-            id="select-file-button"
-          >
-            {t('openFile')}
-          </Button>
-          <Button
-            color="primary"
-            onClick={handleMenuOpen}
-          >
-            {t('otherOperations')}
-          </Button>
-        </ButtonGroup>
-      </Box>
+    <TooltipProvider>
+      <div className="min-h-screen bg-background">
+        {/* ヘッダー */}
+        <header className="border-b bg-card">
+          <div className="container mx-auto px-6 py-4">
+            <div className="flex flex-col items-center space-y-4">
+              <h1 className="text-3xl font-bold text-center text-primary">
+                {t('title')}
+              </h1>
 
-      {/* 現在のファイルパス表示 */}
-      {currentFilePath && (
-        <Box
-          sx={{
-            textAlign: 'center',
-            mb: 2,
-            p: 1,
-            bgcolor: 'background.paper',
-            border: 1,
-            borderColor: 'divider',
-            borderRadius: 1,
-            boxShadow: 1,
-            color: 'text.primary',
-            wordBreak: 'break-all',
-            fontSize: '0.9rem',
-          }}
-        >
-          {t('currentFile')} {currentFilePath}
-        </Box>
-      )}
+              {/* 言語切り替えとテーマ切り替え */}
+              <div className="flex items-center gap-2">
+                <LanguageSwitcher />
+                <ThemeSwitcher />
+              </div>
+            </div>
+          </div>
+        </header>
 
-      {/* ドロップダウンメニュー */}
-      <Menu
-        anchorEl={menuAnchorEl}
-        open={Boolean(menuAnchorEl)}
-        onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem onClick={() => { overwriteDefaultConfig(); handleMenuClose(); }}>
-          {t('overwriteDefaultConfig')}
-        </MenuItem>
-        <MenuItem onClick={() => { resetSelectedItems(); handleMenuClose(); }}>
-          {t('resetSelectedItems')}
-        </MenuItem>
-        <MenuItem onClick={() => { restoreBackup(); handleMenuClose(); }}>
-          {t('restoreBackup')}
-        </MenuItem>
-      </Menu>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "32px",
-          justifyItems: "center",
-          alignItems: "start",
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
-          <SettingsCard 
-            title={t('fontSettings')} 
-            items={fontItems} 
-            onItemChange={handleItemChange} 
-            onItemSelect={handleItemSelect}
-            getLabel={t}
-          />
-          <SettingsCard 
-            title={t('layoutSettings')} 
-            items={layoutItems} 
-            onItemChange={handleItemChange} 
-            onItemSelect={handleItemSelect}
-            getLabel={t}
-          />
-          <SettingsCard 
-            title={t('formatSettings')} 
-            items={formatItems} 
-            onItemChange={handleItemChange} 
-            onItemSelect={handleItemSelect}
-            getLabel={t}
-          />
-        </div>
-        <SettingsCard 
-          title={t('colorSettings')} 
-          items={colorItems} 
-          onItemChange={handleItemChange} 
-          onItemSelect={handleItemSelect}
-          getLabel={t}
-        />
+        {/* メインコンテンツ */}
+        <main className="container mx-auto px-6 py-8">
+          {/* アクションバー */}
+          <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="default"
+                  onClick={() => saveConfig()}
+                  className="flex items-center gap-2"
+                >
+                  <Save className="h-4 w-4" />
+                  {t('saveConfig')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('saveConfigTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={saveAsConfig}
+                  className="flex items-center gap-2 bg-primary"
+                >
+                  <Download className="h-4 w-4" />
+                  {t('saveAs')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('saveAsTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={saveConfigToProgramData}
+                  className="flex items-center gap-2 bg-primary"
+                >
+                  <FileText className="h-4 w-4" />
+                  {t('saveToProgramData')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('saveToProgramDataTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  onClick={createBackup}
+                  className="flex items-center gap-2 bg-primary"
+                >
+                  <Archive className="h-4 w-4" />
+                  {t('createBackup')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{t('createBackupTooltip')}</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Button
+              variant="secondary"
+              onClick={selectFileAndLoad}
+              className="flex items-center gap-2 bg-primary"
+            >
+              <FolderOpen className="h-4 w-4" />
+              {t('openFile')}
+            </Button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary" className="flex items-center gap-2">
+                  <MoreHorizontal className="h-4 w-4" />
+                  {t('otherOperations')}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={overwriteDefaultConfig}>
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  {t('overwriteDefaultConfig')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={resetSelectedItems}>
+                  <RotateCcw className="h-4 w-4 mr-2" />
+                  {t('resetSelectedItems')}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={restoreBackup}>
+                  <Upload className="h-4 w-4 mr-2" />
+                  {t('restoreBackup')}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* 現在のファイルパス表示 */}
+          {currentFilePath && (
+            <div className="mb-8 p-4 bg-card border rounded-lg shadow-sm">
+              <p className="text-sm text-muted-foreground break-all">
+                <span className="font-medium">{t('currentFile')}</span>{' '}
+                {currentFilePath}
+              </p>
+            </div>
+          )}
+
+          {/* 設定カード */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-8">
+              <SettingsCard
+                title={t('fontSettings')}
+                items={fontItems}
+                onItemChange={handleItemChange}
+                onItemSelect={handleItemSelect}
+                getLabel={t}
+              />
+              <SettingsCard
+                title={t('layoutSettings')}
+                items={layoutItems}
+                onItemChange={handleItemChange}
+                onItemSelect={handleItemSelect}
+                getLabel={t}
+              />
+              <SettingsCard
+                title={t('formatSettings')}
+                items={formatItems}
+                onItemChange={handleItemChange}
+                onItemSelect={handleItemSelect}
+                getLabel={t}
+              />
+            </div>
+            <div className="flex justify-center">
+              <SettingsCard
+                title={t('colorSettings')}
+                items={colorItems}
+                onItemChange={handleItemChange}
+                onItemSelect={handleItemSelect}
+                getLabel={t}
+              />
+            </div>
+          </div>
+        </main>
+
+        {/* フッター */}
+        <footer className="border-t bg-card mt-16">
+          <div className="container mx-auto px-6 py-4">
+            <p className="text-center text-sm text-muted-foreground">
+              AviUtl2 Style.conf Editor v{version} by Yu-yu0202
+            </p>
+          </div>
+        </footer>
       </div>
-    </Box>
+    </TooltipProvider>
   );
 };
 

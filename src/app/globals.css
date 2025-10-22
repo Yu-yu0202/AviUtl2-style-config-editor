@@ -1,19 +1,44 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "tailwindcss";
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Radix Themes配下でTailwindのトークンをRadix変数にマッピング */
+:where(.radix-themes, [data-radix-theme]) {
+  /* Primary/Accent */
+  --color-primary: var(--accent-9);
+  --color-primary-foreground: var(--accent-contrast);
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-noto-sans-jp);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Secondary / Neutral */
+  --color-secondary: var(--gray-9);
+  --color-secondary-foreground: var(--gray-contrast);
+
+  /* Subtle/Muted surfaces */
+  --color-muted: var(--gray-3);
+  --color-muted-foreground: var(--gray-11);
+
+  /* Accent subtle surface */
+  --color-accent: var(--accent-4);
+  --color-accent-foreground: var(--accent-12);
+
+  /* Panels / Cards / Popovers */
+  --color-popover: var(--gray-1);
+  --color-popover-foreground: var(--gray-12);
+  --color-card: var(--gray-1);
+  --color-card-foreground: var(--gray-12);
+
+  /* Borders / Inputs / Focus ring */
+  --color-border: var(--gray-6);
+  --color-input: var(--gray-6);
+  --color-ring: var(--accent-8);
+
+  /* Page background and foreground */
+  --color-background: var(--gray-1);
+  --color-foreground: var(--gray-12);
+  --color-surface: var(--gray-1);
+
+  /* Status colors from Radix palettes */
+  --color-warning: var(--amber-9);
+  --color-danger: var(--tomato-9);
+  --color-success: var(--grass-9);
+
+  /* Radius follows Radix Theme radius scale; keep small rounding */
+  --radius: 0.375rem;
 }
