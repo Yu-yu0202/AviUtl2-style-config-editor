@@ -31,7 +31,7 @@ function applyTheme(theme: 'light' | 'dark') {
 }
 
 export const ThemeSwitcher: React.FC = () => {
-  const [theme, setTheme] = React.useState<'light' | 'dark'>(getTheme());
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
 
   // Apply theme to DOM and save to storage
   const doApply = useCallback((newTheme: 'light' | 'dark') => {
