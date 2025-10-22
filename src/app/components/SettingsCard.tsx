@@ -1,9 +1,7 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import type { TranslationKey } from '../i18n/translations';
 
 export type SettingsCardProp = {
@@ -25,83 +23,93 @@ export type SettingsCardProps = {
   getLabel?: (key: TranslationKey) => string;
 };
 
-export function SettingsCard({ title, items, onItemChange, onItemSelect, getLabel }: SettingsCardProps) {
+export function SettingsCard({
+  title,
+  items,
+  onItemChange,
+  onItemSelect,
+  getLabel,
+}: SettingsCardProps) {
   return (
-    <Card
-      variant="outlined"
-      sx={{
-        borderRadius: 2,
-        borderColor: '#e0e0e0',
-        boxShadow: 'none',
-        p: 2,
-        width: 550
-      }}
-    >
-      <CardHeader
-        title={title}
-        titleTypographyProps={{ color: 'primary', fontWeight: 'bold', fontSize: 20 }}
-      />
+    <Card className="w-full max-w-2xl">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold text-primary">
+          {title}
+        </CardTitle>
+      </CardHeader>
       <CardContent>
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: 2,
-          }}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {items.map((item, idx) => (
-            <Box key={idx} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <div key={idx} className="flex flex-col space-y-2">
+              <div className="flex items-center space-x-2">
                 <Checkbox
+                  id={`${item.internalGroup}-${item.internalID}`}
                   checked={item.isSelected || false}
-                  onChange={(e) => onItemSelect(item.internalGroup, item.internalID, e.target.checked)}
-                  size="small"
+                  onCheckedChange={checked =>
+                    onItemSelect(item.internalGroup, item.internalID, !!checked)
+                  }
                 />
-                <span style={{ fontSize: 14, color: '#333', fontWeight: 500 }}>
-                  {getLabel && item.labelKey ? getLabel(item.labelKey as TranslationKey) : item.label}
-                </span>
-              </Box>
+                <Label
+                  htmlFor={`${item.internalGroup}-${item.internalID}`}
+                  className="text-sm font-medium cursor-pointer"
+                >
+                  {getLabel && item.labelKey
+                    ? getLabel(item.labelKey as TranslationKey)
+                    : item.label}
+                </Label>
+              </div>
               {item.type === 'color' ? (
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <div className="flex items-center space-x-2">
                   <input
                     type="color"
                     value={
                       typeof item.value === 'string'
-                        ? (item.value.startsWith('#') ? item.value : `#${item.value}`)
+                        ? item.value.startsWith('#')
+                          ? item.value
+                          : `#${item.value}`
                         : '#000000'
                     }
                     onChange={e => {
-                      const val = e.target.value.startsWith('#') ? e.target.value.slice(1) : e.target.value;
+                      const val = e.target.value.startsWith('#')
+                        ? e.target.value.slice(1)
+                        : e.target.value;
                       onItemChange(item.internalGroup, item.internalID, val);
                     }}
-                    style={{ width: 36, height: 36, border: 'none', background: 'none', padding: 0 }}
+                    className="w-9 h-9 border border-input rounded-md cursor-pointer"
                   />
-                  <TextField
+                  <Input
                     type="text"
-                    value={typeof item.value === 'string' ? item.value.replace(/^#/, '') : ''}
-                    size="small"
-                    variant="outlined"
+                    value={
+                      typeof item.value === 'string'
+                        ? item.value.replace(/^#/, '')
+                        : ''
+                    }
+                    placeholder="000000"
+                    maxLength={6}
                     onChange={e => {
-                      // 入力値から#を除去して保存
                       const val = e.target.value.replace(/^#/, '');
                       onItemChange(item.internalGroup, item.internalID, val);
                     }}
-                    inputProps={{ maxLength: 6, style: { width: 80 } }}
+                    className="w-20"
                   />
-                </Box>
+                </div>
               ) : (
-                <TextField
+                <Input
                   type={item.type}
                   placeholder={item.placeholder}
                   value={item.value || ''}
-                  size="small"
-                  variant="outlined"
-                  onChange={(e) => onItemChange(item.internalGroup, item.internalID, e.target.value)}
+                  onChange={e =>
+                    onItemChange(
+                      item.internalGroup,
+                      item.internalID,
+                      e.target.value
+                    )
+                  }
                 />
               )}
-            </Box>
+            </div>
           ))}
-        </Box>
+        </div>
       </CardContent>
     </Card>
   );
