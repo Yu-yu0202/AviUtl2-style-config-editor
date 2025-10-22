@@ -21,10 +21,14 @@ export default function RadixThemeProvider({
   children: React.ReactNode;
   asChild?: boolean;
 }) {
-  const [appearance, setAppearance] =
-    React.useState<ThemeMode>(getInitialTheme());
+  const [appearance, setAppearance] = React.useState<ThemeMode>('light');
+  const [isHydrated, setIsHydrated] = React.useState(false);
 
   React.useEffect(() => {
+    // Set the correct theme after hydration
+    setIsHydrated(true);
+    setAppearance(getInitialTheme());
+
     const handler = (e: Event) => {
       const detail = (e as CustomEvent).detail as ThemeMode | undefined;
       if (detail === 'light' || detail === 'dark') {
@@ -44,6 +48,7 @@ export default function RadixThemeProvider({
       radius="small"
       appearance={appearance}
       asChild={asChild}
+      suppressHydrationWarning={!isHydrated}
     >
       {children}
     </Theme>
