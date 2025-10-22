@@ -1,6 +1,6 @@
 [package]
 name = "aviutl2-style-config-editor"
-version = "0.3.0"
+version = "1.0.0-preview.1"
 description = "AviUtl2 style.conf Editor"
 authors = ["Yu-yu0202"]
 edition = "2021"
