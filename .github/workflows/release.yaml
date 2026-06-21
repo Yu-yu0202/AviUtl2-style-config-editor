@@ -26,10 +26,8 @@ jobs:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 10.12.1
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
 
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
@@ -43,8 +41,6 @@ jobs:
         with:
           path: |
             node_modules
-            ~/.pnpm-store
-            ~/.cache/pnpm
           key: ${{ runner.os }}-node-${{ hashFiles('bun.lock') }}-${{ hashFiles('package.json') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ hashFiles('bun.lock') }}-
@@ -74,7 +70,7 @@ jobs:
             ${{ runner.os }}-tauri-release-
 
       - name: Install dependencies
-        run: pnpm install
+        run: bun install --frozen-lockfile
 
       - name: Install sccache
         uses: mozilla-actions/sccache-action@v0.0.3
@@ -86,7 +82,7 @@ jobs:
           echo "SCCACHE_CACHE_SIZE=2G" >> $GITHUB_ENV
 
       - name: Build Tauri app (release)
-        run: pnpm tauri build
+        run: bun tauri build
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
