@@ -114,6 +114,12 @@ export class ItemsDef {
       internalGroup: 'Color',
     },
     {
+      labelKey: 'groupingSeparatorColor' as TranslationKey,
+      type: 'color',
+      internalID: 'GroupingSeparator',
+      internalGroup: 'Color',
+    },
+    {
       labelKey: 'titleHeaderColor' as TranslationKey,
       type: 'color',
       internalID: 'TitleHeader',
@@ -189,6 +195,24 @@ export class ItemsDef {
       labelKey: 'sliderColor' as TranslationKey,
       type: 'color',
       internalID: 'SliderCursor',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'sliderThumbBodyColor' as TranslationKey,
+      type: 'color',
+      internalID: 'SliderThumbBody',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'sliderThumbBodyFocusColor' as TranslationKey,
+      type: 'color',
+      internalID: 'SliderThumbBodyFocus',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'sliderThumbBorderColor' as TranslationKey,
+      type: 'color',
+      internalID: 'SliderThumbBorder',
       internalGroup: 'Color',
     },
     {
@@ -288,6 +312,12 @@ export class ItemsDef {
       internalGroup: 'Color',
     },
     {
+      labelKey: 'layerSelectColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LayerSelect',
+      internalGroup: 'Color',
+    },
+    {
       labelKey: 'layerRangeBackgroundColor' as TranslationKey,
       type: 'color',
       internalID: 'LayerRange',
@@ -360,6 +390,30 @@ export class ItemsDef {
       internalGroup: 'Color',
     },
     {
+      labelKey: 'objectVideoEffectColor' as TranslationKey,
+      type: 'color',
+      internalID: 'ObjectVideoEffect',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'objectVideoEffectSelectColor' as TranslationKey,
+      type: 'color',
+      internalID: 'ObjectVideoEffectSelect',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'objectAudioEffectColor' as TranslationKey,
+      type: 'color',
+      internalID: 'ObjectAudioEffect',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'objectAudioEffectSelectColor' as TranslationKey,
+      type: 'color',
+      internalID: 'ObjectAudioEffectSelect',
+      internalGroup: 'Color',
+    },
+    {
       labelKey: 'objectHoverColor' as TranslationKey,
       type: 'color',
       internalID: 'ObjectHover',
@@ -381,6 +435,12 @@ export class ItemsDef {
       labelKey: 'objectWaveformColor' as TranslationKey,
       type: 'color',
       internalID: 'ObjectWaveform',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'objectTempBufferColor' as TranslationKey,
+      type: 'color',
+      internalID: 'ObjectTempBuffer',
       internalGroup: 'Color',
     },
     {
@@ -503,6 +563,42 @@ export class ItemsDef {
       internalID: 'LevelMeterGreen',
       internalGroup: 'Color',
     },
+    {
+      labelKey: 'logVerboseColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogVerbose',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'logInfoColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogInfo',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'logScriptColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogScript',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'logPluginColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogPlugin',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'logWarnColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogWarn',
+      internalGroup: 'Color',
+    },
+    {
+      labelKey: 'logErrorColor' as TranslationKey,
+      type: 'color',
+      internalID: 'LogError',
+      internalGroup: 'Color',
+    },
   ];
 
   public static readonly layoutItemsDef = [
@@ -531,6 +627,12 @@ export class ItemsDef {
       internalGroup: 'Layout',
     },
     {
+      labelKey: 'groupTabHeight' as TranslationKey,
+      type: 'number',
+      internalID: 'GroupTabHeight',
+      internalGroup: 'Layout',
+    },
+    {
       labelKey: 'timeGaugeHeight' as TranslationKey,
       type: 'number',
       internalID: 'TimeGaugeHeight',
@@ -543,9 +645,33 @@ export class ItemsDef {
       internalGroup: 'Layout',
     },
     {
+      labelKey: 'layerHeightMenu0' as TranslationKey,
+      type: 'text',
+      internalID: 'LayerHeightMenu0',
+      internalGroup: 'Layout',
+    },
+    {
+      labelKey: 'layerHeightMenu1' as TranslationKey,
+      type: 'text',
+      internalID: 'LayerHeightMenu1',
+      internalGroup: 'Layout',
+    },
+    {
+      labelKey: 'layerHeightMenu2' as TranslationKey,
+      type: 'text',
+      internalID: 'LayerHeightMenu2',
+      internalGroup: 'Layout',
+    },
+    {
       labelKey: 'layerHeaderWidth' as TranslationKey,
       type: 'number',
       internalID: 'LayerHeaderWidth',
+      internalGroup: 'Layout',
+    },
+    {
+      labelKey: 'layerSectionSize' as TranslationKey,
+      type: 'number',
+      internalID: 'LayerSectionSize',
       internalGroup: 'Layout',
     },
     {
@@ -618,4 +744,4 @@ export class ItemsDef {
       internalGroup: 'Format',
     },
   ];
-}   
+}
