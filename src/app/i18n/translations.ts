@@ -212,6 +212,8 @@ export const translations = {
     layerHoverColor: 'レイヤーホバーの色',
 
     layerDisableColor: 'レイヤー無効の色',
+    
+    layerSelectColor: 'レイヤーのの背景色 (選択時)',
 
     layerRangeBackgroundColor: 'レイヤー範囲背景の色',
 
@@ -529,6 +531,8 @@ export const translations = {
     layerHoverColor: 'Layer Hover Color',
 
     layerDisableColor: 'Layer Disabled Color',
+    
+    layerSelectColor: 'Layer Background Color (Selected)',
 
     layerRangeBackgroundColor: 'Layer Range Background Color',
 
