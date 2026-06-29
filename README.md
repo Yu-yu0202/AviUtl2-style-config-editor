@@ -10,21 +10,21 @@ AviUtl2のstyle.confファイルを編集するためのアプリケーション
 ### 必要な環境
 - Node.js (v18以上,動作確認済み:v22.14.0)
 - Rust (最新版)
-- pnpm
+- bun
 
 ### 依存関係のインストール
 ```bash
-pnpm install
+bun install
 ```
 
 ### 開発サーバーの起動
 ```bash
-pnpm tauri:dev
+bun tauri:dev
 ```
 
 ### ビルド
 ```bash
-pnpm tauri:build
+bun tauri:build
 ```
 
 ## 機能
